@@ -1,0 +1,5 @@
+{
+    "sketch": "Arduino\\singleended\\singleended.ino",
+    "board": "arduino:mbed_nano:nano33ble",
+    "output": "../ArduinoOutput"
+}
