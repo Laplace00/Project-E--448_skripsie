@@ -3,9 +3,9 @@
 //const char* mainServiceUuid = "00000000-0000-1000-8000-00805F9B34FB";
 const char* deviceServiceUuid = "00001101-0000-1000-8000-00805F9B34FB";
 const char* deviceServiceCharacteristicUuid = "00002101-0000-1000-8000-00805F9B34FB";
-int gesture = -1;
+uint8_t gesture[2] = {5,10};
 BLEService gestureService(deviceServiceUuid); 
-BLEByteCharacteristic gestureCharacteristic(deviceServiceCharacteristicUuid, BLERead | BLEWrite);
+BLECharacteristic gestureCharacteristic(deviceServiceCharacteristicUuid, BLERead | BLEWrite|BLENotify,16);
 
 
 void setup() {
@@ -25,7 +25,7 @@ void setup() {
   BLE.setAdvertisedService(gestureService);
   gestureService.addCharacteristic(gestureCharacteristic);
   BLE.addService(gestureService);
-  gestureCharacteristic.writeValue(-1);
+  //gestureCharacteristic.writeValue(-1);
   BLE.advertise();
 
   Serial.println("Nano 33 BLE (Peripheral Device)");
@@ -48,10 +48,12 @@ void setup() {
     Serial.println(" ");
 
     while (central.connected()) {
-      if (gestureCharacteristic.written()) {
-         gesture = gestureCharacteristic.value();
-         Serial.println(gesture);
-       }
+      gestureCharacteristic.writeValue(gesture,2,false);
+      delay(100);
+      // if (gestureCharacteristic.written()) {
+      //    gesture = gestureCharacteristic.value();
+      //    Serial.println(gesture);
+      //  }
     }
     
     Serial.println("* Disconnected to central device!");
