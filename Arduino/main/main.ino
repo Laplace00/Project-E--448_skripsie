@@ -4,13 +4,17 @@
 Adafruit_ADS1115 ads;  /* Use this for the 16-bit version */
 
 const char* deviceServiceUuid = "00001101-0000-1000-8000-00805F9B34FB";
-const char* deviceServiceCharacteristicUuid = "00002101-0000-1000-8000-00805F9B34FB";
-int8_t data[16] = {0};
-int8_t* pointer = data;
-uint arch,met5,met3,met1,heelR,heelL,hallux,toes;
+const char* deviceServiceCharacteristicUuid1 = "00002101-0000-1000-8000-00805F9B34FB";
+const char* deviceServiceCharacteristicUuid2 = "00003101-0000-1000-8000-00805F9B34FB";
+int8_t data1[16] = {0};
+int8_t data2[16] = {0};
+int8_t* pointer1 = data1;
+int8_t* pointer2 = data2;
+float arch,met5,met3,met1,heelR,heelL,hallux,toes,counter;
 
 BLEService gaitService(deviceServiceUuid); 
-BLECharacteristic gaitCharacteristic(deviceServiceCharacteristicUuid, BLERead | BLEWrite|BLENotify,16);
+BLECharacteristic gaitCharacteristic1(deviceServiceCharacteristicUuid1, BLERead | BLEWrite|BLENotify,16);
+BLECharacteristic gaitCharacteristic2(deviceServiceCharacteristicUuid2, BLERead | BLEWrite|BLENotify,16);
 void getReadings();
 
 void setup(void)
@@ -33,9 +37,11 @@ void setup(void)
 
   BLE.setLocalName("Arduino Nano 33 BLE (Peripheral)");
   BLE.setAdvertisedService(gaitService);
-  gaitService.addCharacteristic(gaitCharacteristic);
+  gaitService.addCharacteristic(gaitCharacteristic1);
+  gaitService.addCharacteristic(gaitCharacteristic2);
   BLE.addService(gaitService);
   BLE.advertise();
+
 
 
   
@@ -85,7 +91,10 @@ void loop(void)
 
     while (central.connected()) {
       getReadings();
-      gaitCharacteristic.writeValue(&data,16,false);
+      gaitCharacteristic1.writeValue(&data1,16,false);
+      gaitCharacteristic2.writeValue(&data2,16,false);
+      counter++;
+      delay(500);
       }
     
     Serial.println("* Disconnected to central device!");
@@ -113,28 +122,32 @@ void getReadings(){
   arch = map(arch,0,17200,0,4096);
   met5 = map(met5,0,17200,0,4096);
 
-   Serial.println("-----------------------------------------------------------");
-  Serial.print("ARCH: "); Serial.print(arch); Serial.print("  "); //Serial.print(volts0); Serial.println("V");
+  //  Serial.println("-----------------------------------------------------------");
+  // Serial.print("ARCH: "); Serial.print(arch); Serial.print("  "); //Serial.print(volts0); Serial.println("V");
  
-  Serial.print("MET3: "); Serial.print(met3); Serial.println("  ");
-  Serial.print("MET5: "); Serial.print(met5); Serial.print("  "); //Serial.print(volts3); Serial.println("V");
-  Serial.print("MET1: "); Serial.print(met1); Serial.println("  ");
-  Serial.print("HEEL_R: "); Serial.print(heelR); Serial.println("  ");
-  Serial.print("HEEL_L: "); Serial.print(heelL); Serial.println("  ");
-  Serial.print("HALLUX: "); Serial.print(hallux); Serial.println("  ");
-  Serial.print("TOES: "); Serial.print(toes); Serial.println("  ");
+  // Serial.print("MET3: "); Serial.print(met3); Serial.println("  ");
+  // Serial.print("MET5: "); Serial.print(met5); Serial.print("  "); //Serial.print(volts3); Serial.println("V");
+  // Serial.print("MET1: "); Serial.print(met1); Serial.println("  ");
+  // Serial.print("HEEL_R: "); Serial.print(heelR); Serial.println("  ");
+  // Serial.print("HEEL_L: "); Serial.print(heelL); Serial.println("  ");
+  // Serial.print("HALLUX: "); Serial.print(hallux); Serial.println("  ");
 
+  //Serial.print("TOES: "); Serial.print(toes,HEX); Serial.println("  ");
+  // //Serial.println(counter);
+  // Serial.println("-----------------------------------------------------------");
+  Serial.println(gaitService.characteristicCount());
 
-  memcpy(pointer, &arch,2);        //position 0
-  memcpy(pointer + 2, &met5,2);    //position 2
-  memcpy(pointer + 4, &met3,2);    //position 4
-  memcpy(pointer + 6, &met1,2);    //position 6
-  memcpy(pointer + 8, &heelR,2);   //position 8
-  memcpy(pointer + 10, &heelL,2);  //position 10
-  memcpy(pointer + 12, &hallux,2); //position 12
-  memcpy(pointer + 14, &toes,2);   //position 14
+  memcpy(pointer1, &arch,4);        //position 0
+  memcpy(pointer1 + 4, &met5,4);    //position 2
+  memcpy(pointer1 + 8, &met3,4);    //position 4
+  memcpy(pointer1 + 12, &met1,4);    //position 6
+  memcpy(pointer2, &heelR,4);   //position 8
+  memcpy(pointer2 + 4, &heelL,4);  //position 10
+  memcpy(pointer2 + 8, &hallux,4); //position 12
+  memcpy(pointer2 + 12, &toes,4);   //position 14
+  //memcpy(pointer + 16, &counter,2);//position 16
 
-  // Serial.println (data[0]);
+  // Serial.println (data[0] );
   // Serial.println (data[1]);
   // Serial.println (data[2]);
   // Serial.println (data[3]);
@@ -142,14 +155,16 @@ void getReadings(){
   // Serial.println (data[5]);
   // Serial.println (data[6]);
   // Serial.println (data[7]);
-  // Serial.println (data[8]);
   // Serial.println (data[9]);
   // Serial.println (data[10]);
   // Serial.println (data[11]);
   // Serial.println (data[12]);
   // Serial.println (data[13]);
-  // Serial.println (data[14]);
-  // Serial.println (data[15]);
+  //Serial.println (data[14],HEX);
+  //Serial.println (data[15],HEX);
+  // combine the two bytes
+  //Serial.println((data[15] << 8) | (data[14]&0x000000FF),HEX);
+  //Serial.println((data[15] << 8) | (data[14]&0x000000FF));
 
   //pointer = data; // reset postion
 
