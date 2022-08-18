@@ -1,5 +1,8 @@
 package com.footstrike.myapplication;
 
+import static com.footstrike.myapplication.MainActivity.archVal;
+import static com.footstrike.myapplication.MainActivity.runOnUIThread;
+
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -10,18 +13,35 @@ import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.UUID;
 
 @SuppressLint("MissingPermission")
 public class GattHandler {
 
+    //Gait values
+    public static float arch;
+    public static float met5;
+    public static float met3;
+    public static float met1;
+    public static float heelR;
+    public static float heelL;
+    public static float hallux;
+    public static float toes;
+    static boolean done = true;
+   // public static int counter;
+
+
     //Services and characteristics
     static final UUID deviceServiceUuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-    static final UUID deviceServiceCharacteristicUuid = UUID.fromString("00002101-0000-1000-8000-00805F9B34FB");
+    static final UUID deviceServiceCharacteristicUuid1 = UUID.fromString("00002101-0000-1000-8000-00805F9B34FB");
+    static final UUID deviceServiceCharacteristicUuid2 = UUID.fromString("00003101-0000-1000-8000-00805F9B34FB");
     static final String deviceMAC = "70:74:95:CF:0D:53";
 
     //BLE objects
     static BluetoothGattCharacteristic transChar;
+    static BluetoothGattCharacteristic transChar2;
     static BluetoothGatt mainGatt;
 
     public static ConnectionStatusChangeHandler connectionStatusChangeHandler;
@@ -48,6 +68,11 @@ public class GattHandler {
     public static void write(int s){
         transChar.setValue(s,BluetoothGattCharacteristic.FORMAT_SINT32,0);
         mainGatt.writeCharacteristic(transChar);
+    }
+
+    public static byte[] read(){
+        return transChar.getValue();
+
     }
 
     private static final BluetoothGattCallback gattCallback = new BluetoothGattCallback() {
@@ -79,28 +104,66 @@ public class GattHandler {
             super.onServicesDiscovered(gatt, status);
 
             //Setup
-            transChar = gatt.getService(deviceServiceUuid).getCharacteristics().get(0);
-            transChar.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
+            transChar = gatt.getService(deviceServiceUuid).getCharacteristic(deviceServiceCharacteristicUuid1);
+            transChar2 = gatt.getService(deviceServiceUuid).getCharacteristic(deviceServiceCharacteristicUuid2);
+
 
             //Setup notifications
             gatt.setCharacteristicNotification(transChar, true);
             BluetoothGattDescriptor desc = transChar.getDescriptors().get(0);
             desc.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
 
+
             //Write to descriptor to seal the deal
             gatt.writeDescriptor(desc);
+
+
+
 
         }
 
         @Override
         public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
             super.onDescriptorWrite(gatt, descriptor, status);
+            if(done){
+                gatt.setCharacteristicNotification(transChar2, true);
+                BluetoothGattDescriptor desc2 = transChar2.getDescriptors().get(0);
+                desc2.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
 
+                gatt.writeDescriptor(desc2);
+                done = false;
+            }
         }
 
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
             super.onCharacteristicChanged(gatt, characteristic);
+
+            ByteBuffer buffer = ByteBuffer.wrap(characteristic.getValue());
+            buffer.order(ByteOrder.LITTLE_ENDIAN);
+
+            if (characteristic.getUuid().equals(deviceServiceCharacteristicUuid1)) {
+                arch = buffer.getFloat();
+                met5 = buffer.getFloat();
+                met3 = buffer.getFloat();
+                met1 = buffer.getFloat();
+            }else if(characteristic.getUuid().equals(deviceServiceCharacteristicUuid2)){
+                heelR = buffer.getFloat();
+                heelL = buffer.getFloat();
+                hallux = buffer.getFloat();
+                toes = buffer.getFloat();
+            }
+            runOnUIThread(()->{
+
+                MainActivity.archVal.setText("arch:" + GattHandler.arch);
+                MainActivity.met5Val.setText("met5:" + GattHandler.met5);
+                MainActivity.met3Val.setText("met3:" + GattHandler.met3);
+                MainActivity.met1Val.setText("met1:" + GattHandler.met1);
+                MainActivity.heelRVal.setText("heelR:" + GattHandler.heelR);
+                MainActivity.heelLVal.setText("heelL:" + GattHandler.heelL);
+                MainActivity.halluxVal.setText("hallux:" + GattHandler.hallux);
+                MainActivity.toesVal.setText("toes:" + GattHandler.toes);
+            });
 
         }
 
