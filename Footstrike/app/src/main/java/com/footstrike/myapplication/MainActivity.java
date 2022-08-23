@@ -1,6 +1,9 @@
 package com.footstrike.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,42 +13,33 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-
-
-    public static TextView archVal;
-    public static TextView met5Val;
-    public static TextView met3Val;
-    public static TextView met1Val;
-    public static TextView heelRVal;
-    public static TextView heelLVal;
-    public static TextView halluxVal;
-    public static TextView toesVal;
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        archVal = findViewById(R.id.txtArch);
-        met5Val = findViewById(R.id.txtMet5);
-        met3Val = findViewById(R.id.txtMet3);
-        met1Val = findViewById(R.id.txtMet1);
-        heelRVal = findViewById(R.id.txtHeelR);
-        heelLVal = findViewById(R.id.txtHeelL);
-        halluxVal = findViewById(R.id.txtHallux);
-        toesVal = findViewById(R.id.txtToes);
 
+//        GattHandler.init(this);
+//        GattHandler.init(getApplicationContext());
 
-        GattHandler.init(this);
-        findViewById(R.id.btnConnect).setOnClickListener((View v)->{
-           GattHandler.init(getApplicationContext());
-        });
+        ViewPager2 viewPager2 = findViewById(R.id.viewPager2);
 
+        FragmentStateAdapter adapter = new FragmentStateAdapter(this) {
+            @Override
+            public Fragment createFragment(int position) {
+                switch (position) {
+                    case 0:
+                        return new StatsFragment();
+                    case 1:
+                        return new HeatmapFragment(viewPager2);
+                }
+                return null;
+            }
 
-
-
-
-
-
-
+            @Override
+            public int getItemCount() {
+                return 2;
+            }
+        };
+        viewPager2.setAdapter(adapter);
     }
 
     public static void runOnUIThread(Runnable runnable)

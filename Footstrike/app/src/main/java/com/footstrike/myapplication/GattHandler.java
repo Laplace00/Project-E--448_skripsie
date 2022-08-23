@@ -1,6 +1,5 @@
 package com.footstrike.myapplication;
 
-import static com.footstrike.myapplication.MainActivity.archVal;
 import static com.footstrike.myapplication.MainActivity.runOnUIThread;
 
 import android.annotation.SuppressLint;
@@ -30,6 +29,8 @@ public class GattHandler {
     public static float hallux;
     public static float toes;
     static boolean done = true;
+    public static Runnable runnable = () -> {};
+    public static Runnable runnableTxt = () -> {};
    // public static int counter;
 
 
@@ -117,9 +118,6 @@ public class GattHandler {
             //Write to descriptor to seal the deal
             gatt.writeDescriptor(desc);
 
-
-
-
         }
 
         @Override
@@ -154,15 +152,17 @@ public class GattHandler {
                 toes = buffer.getFloat();
             }
             runOnUIThread(()->{
+                runnable.run();
+                runnableTxt.run();
 
-                MainActivity.archVal.setText("arch:" + GattHandler.arch);
-                MainActivity.met5Val.setText("met5:" + GattHandler.met5);
-                MainActivity.met3Val.setText("met3:" + GattHandler.met3);
-                MainActivity.met1Val.setText("met1:" + GattHandler.met1);
-                MainActivity.heelRVal.setText("heelR:" + GattHandler.heelR);
-                MainActivity.heelLVal.setText("heelL:" + GattHandler.heelL);
-                MainActivity.halluxVal.setText("hallux:" + GattHandler.hallux);
-                MainActivity.toesVal.setText("toes:" + GattHandler.toes);
+//                StatsFragment.archVal.setText("arch:" + GattHandler.arch);
+//                StatsFragment.met5Val.setText("met5:" + GattHandler.met5);
+//                StatsFragment.met3Val.setText("met3:" + GattHandler.met3);
+//                StatsFragment.met1Val.setText("met1:" + GattHandler.met1);
+//                StatsFragment.heelRVal.setText("heelR:" + GattHandler.heelR);
+//                StatsFragment.heelLVal.setText("heelL:" + GattHandler.heelL);
+//                StatsFragment.halluxVal.setText("hallux:" + GattHandler.hallux);
+//                StatsFragment.toesVal.setText("toes:" + GattHandler.toes);
             });
 
         }
