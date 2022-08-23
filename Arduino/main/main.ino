@@ -10,7 +10,7 @@ int8_t data1[16] = {0};
 int8_t data2[16] = {0};
 int8_t* pointer1 = data1;
 int8_t* pointer2 = data2;
-float arch,met5,met3,met1,heelR,heelL,hallux,toes,counter;
+float arch,met5,met3,met1,heelR,heelL,hallux,toes,counter,arch_init,met5_init,arch_max,met5_max;
 
 BLEService gaitService(deviceServiceUuid); 
 BLECharacteristic gaitCharacteristic1(deviceServiceCharacteristicUuid1, BLERead | BLEWrite|BLENotify,16);
@@ -22,7 +22,7 @@ void setup(void)
   Serial.begin(9600);
 
     // Ensure serial port is ready.
-  while (!Serial);
+  //while (!Serial);
 
     if (!BLE.begin()) {
     Serial.println("- Starting Bluetooth® Low Energy module failed!");
@@ -94,7 +94,7 @@ void loop(void)
       gaitCharacteristic1.writeValue(&data1,16,false);
       gaitCharacteristic2.writeValue(&data2,16,false);
       counter++;
-      delay(500);
+      //delay(500);
       }
     
     Serial.println("* Disconnected to central device!");
@@ -108,10 +108,10 @@ void getReadings(){
 
   //float volts0, volts1, volts2, volts3;
 
-  arch = ads.readADC_SingleEnded(0);
-  //adc1 = ads.readADC_SingleEnded(1);
-  //adc2 = ads.readADC_SingleEnded(2);
-  met5 = ads.readADC_SingleEnded(3);
+  arch_init = ads.readADC_SingleEnded(0);
+  arch_max = max(arch_max,arch_init);
+  met5_init = ads.readADC_SingleEnded(3);
+  met5_max = max(met5_max,met5_init);
   met3 = analogRead(A0);
   met1 = analogRead(A1);
   heelR = analogRead(A2);
@@ -119,23 +119,23 @@ void getReadings(){
   hallux = analogRead(A6);
   toes = analogRead(A7);
 
-  arch = map(arch,0,17200,0,4096);
-  met5 = map(met5,0,17200,0,4096);
+  arch = map(arch_init,0,arch_max,0,4096);
+  met5 = map(met5_init,0,met5_max,0,4096);
 
-  //  Serial.println("-----------------------------------------------------------");
-  // Serial.print("ARCH: "); Serial.print(arch); Serial.print("  "); //Serial.print(volts0); Serial.println("V");
+   Serial.println("-----------------------------------------------------------");
+  Serial.print("ARCH: "); Serial.print(arch); Serial.print("  "); //Serial.print(volts0); Serial.println("V");
  
-  // Serial.print("MET3: "); Serial.print(met3); Serial.println("  ");
-  // Serial.print("MET5: "); Serial.print(met5); Serial.print("  "); //Serial.print(volts3); Serial.println("V");
-  // Serial.print("MET1: "); Serial.print(met1); Serial.println("  ");
-  // Serial.print("HEEL_R: "); Serial.print(heelR); Serial.println("  ");
-  // Serial.print("HEEL_L: "); Serial.print(heelL); Serial.println("  ");
-  // Serial.print("HALLUX: "); Serial.print(hallux); Serial.println("  ");
+  Serial.print("MET3: "); Serial.print(met3); Serial.println("  ");
+  Serial.print("MET5: "); Serial.print(met5); Serial.print("  "); //Serial.print(volts3); Serial.println("V");
+  Serial.print("MET1: "); Serial.print(met1); Serial.println("  ");
+  Serial.print("HEEL_R: "); Serial.print(heelR); Serial.println("  ");
+  Serial.print("HEEL_L: "); Serial.print(heelL); Serial.println("  ");
+  Serial.print("HALLUX: "); Serial.print(hallux); Serial.println("  ");
 
-  //Serial.print("TOES: "); Serial.print(toes,HEX); Serial.println("  ");
-  // //Serial.println(counter);
-  // Serial.println("-----------------------------------------------------------");
-  Serial.println(gaitService.characteristicCount());
+  Serial.print("TOES: "); Serial.print(toes,HEX); Serial.println("  ");
+  //Serial.println(counter);
+  Serial.println("-----------------------------------------------------------");
+  //Serial.println(gaitService.characteristicCount());
 
   memcpy(pointer1, &arch,4);        //position 0
   memcpy(pointer1 + 4, &met5,4);    //position 2
