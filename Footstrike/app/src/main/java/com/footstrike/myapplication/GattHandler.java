@@ -11,6 +11,7 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
+import android.provider.ContactsContract;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -28,6 +29,8 @@ public class GattHandler {
     public static float heelL;
     public static float hallux;
     public static float toes;
+
+    public static DataStore data = new DataStore();
     static boolean done = true;
     public static Runnable runnable = () -> {};
     public static Runnable runnableTxt = () -> {};
@@ -141,7 +144,7 @@ public class GattHandler {
             buffer.order(ByteOrder.LITTLE_ENDIAN);
 
             if (characteristic.getUuid().equals(deviceServiceCharacteristicUuid1)) {
-                arch = buffer.getFloat();
+                arch  = buffer.getFloat();
                 met5 = buffer.getFloat();
                 met3 = buffer.getFloat();
                 met1 = buffer.getFloat();
@@ -151,6 +154,15 @@ public class GattHandler {
                 hallux = buffer.getFloat();
                 toes = buffer.getFloat();
             }
+            data.archVal  = arch;
+            data.met5Val = met5;
+            data.met3Val = met3;
+            data.met1Val = met1;
+            data.heelrVal = heelR;
+            data.heellVal = heelL;
+            data.halluxVal = hallux;
+            data.toesVal = toes;
+
             runOnUIThread(()->{
                 runnable.run();
                 runnableTxt.run();
