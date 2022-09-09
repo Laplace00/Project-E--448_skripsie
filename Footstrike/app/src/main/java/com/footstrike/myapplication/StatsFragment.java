@@ -1,12 +1,17 @@
 package com.footstrike.myapplication;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 // import gatthandler
@@ -29,8 +34,10 @@ public class StatsFragment extends Fragment {
     public  TextView heelLVal;
     public  TextView halluxVal;
     public  TextView toesVal;
-    ArrayList<DataStore> dataList;
+    public static ArrayList<DataStore> dataList;
     public boolean recordData = false;
+    private String m_Text = "";
+
 
     public StatsFragment() {
         // Required empty public constructor
@@ -49,6 +56,8 @@ public class StatsFragment extends Fragment {
 
         View out = inflater.inflate(R.layout.fragment_stats, container, false);
 
+
+
         //GattHandler.init(getActivity());
         out.findViewById(R.id.btnConnect).setOnClickListener((View v)->{
             GattHandler.init(getActivity().getApplicationContext());
@@ -61,20 +70,46 @@ public class StatsFragment extends Fragment {
                 Toast.makeText(out.getContext(), "Started recording data", Toast.LENGTH_SHORT).show();
             }else{
                 recordData = false;
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Enter file name");
 
-                try {
-                    File outfile = new File(MainActivity.file, "sample");
-                    PrintStream writer = new PrintStream(outfile);
-                    for (DataStore data: dataList
-                         ) {
-                        writer.println(data);
+                // Set up the input
+                final EditText input = new EditText(getContext());
+                // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                builder.setView(input);
+
+                // Set up the buttons
+                builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        m_Text = input.getText().toString();
+                        try {
+                            File outfile = new File(FileHelper.getRoot(), m_Text + ".footstrike");
+                            PrintStream writer = new PrintStream(outfile);
+                            for (DataStore data: dataList
+                            ) {
+                                writer.println(data);
+                            }
+                            writer.flush();
+                            writer.close();
+                            Toast.makeText(out.getContext(), "Stopped recording data and saved to text file", Toast.LENGTH_SHORT).show();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
-                    writer.flush();
-                    writer.close();
-                    Toast.makeText(out.getContext(), "Stopped recording data", Toast.LENGTH_SHORT).show();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(out.getContext(), "Stopped recording data and file not saved", Toast.LENGTH_SHORT).show();
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
+
+
 
             }
 

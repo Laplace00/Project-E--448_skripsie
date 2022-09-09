@@ -166,15 +166,6 @@ public class GattHandler {
             runOnUIThread(()->{
                 runnable.run();
                 runnableTxt.run();
-
-//                StatsFragment.archVal.setText("arch:" + GattHandler.arch);
-//                StatsFragment.met5Val.setText("met5:" + GattHandler.met5);
-//                StatsFragment.met3Val.setText("met3:" + GattHandler.met3);
-//                StatsFragment.met1Val.setText("met1:" + GattHandler.met1);
-//                StatsFragment.heelRVal.setText("heelR:" + GattHandler.heelR);
-//                StatsFragment.heelLVal.setText("heelL:" + GattHandler.heelL);
-//                StatsFragment.halluxVal.setText("hallux:" + GattHandler.hallux);
-//                StatsFragment.toesVal.setText("toes:" + GattHandler.toes);
             });
 
         }

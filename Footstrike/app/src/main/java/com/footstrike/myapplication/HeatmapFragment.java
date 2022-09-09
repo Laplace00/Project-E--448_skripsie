@@ -5,6 +5,8 @@ package com.footstrike.myapplication;
 import static android.os.Looper.getMainLooper;
 import static com.footstrike.myapplication.MainActivity.runOnUIThread;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -15,11 +17,17 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Switch;
+import android.widget.Toast;
 
 import com.footstrike.myapplication.heatmap.HeatMap;
 import com.footstrike.myapplication.heatmap.HeatmapView;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -29,15 +37,7 @@ public class HeatmapFragment extends Fragment {
 
 
     ViewPager2 viewPager;
-    public static float newArch;
-    public static float newMet5;
-    public static float newMet3;
-    public static float newMet1;
-    public static float newHeelR;
-    public static float newHeelL;
-    public static float newHallux;
-    public static float newToes;
-    public static int counter;
+    Switch sw;
 
 
     public HeatmapFragment(ViewPager2 viewPager) {
@@ -55,11 +55,67 @@ public class HeatmapFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_heatmap, container, false);
-
+        DataSeeker dataSeeker = view.findViewById(R.id.dataSeeker);
         HeatmapView heatMapper = view.findViewById(R.id.heatmapView);
 
 
+        view.findViewById(R.id.btnloadFile).setOnClickListener((View v)->{
+            FilePickDialog d = new FilePickDialog(getContext());
+            d.setFileSelectedHandler(file -> {
+                try {
+                    Scanner s = new Scanner(file);
+                    StatsFragment.dataList = new ArrayList<DataStore>();
+                    while(s.hasNextLine()){
+                        StatsFragment.dataList.add(new DataStore(s.nextLine()));
+                    }
+                    dataSeeker.init(new DataSeeker.IDataAccessor() {
+                        @Override
+                        public int getTotalFrames() {
+                            return StatsFragment.dataList.size();
+                        }
 
+                        @Override
+                        public long getTimeStamp(int i) {
+                            return StatsFragment.dataList.get(i).timeStamp;
+                        }
+
+                        @Override
+                        public void displayFrame(int i) {
+                            GattHandler.data.copyFrom(StatsFragment.dataList.get(i));
+                            runOnUIThread(heatMapper::dataChanged);
+                        }
+                    });
+
+
+                    if(!s.hasNext()) return;
+
+
+
+                    //Toast.makeText(this, s.next(), Toast.LENGTH_LONG).show();
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+
+
+            });
+            d.show();
+        });
+        view.findViewById(R.id.btnStartStop).setOnClickListener((View v)->{
+            dataSeeker.playPause();
+        });
+
+
+
+
+
+
+
+
+
+
+        // OpenGL heatmap init
         HeatMap heatMap = heatMapper.getHeatmap();
         heatMap.pointRadius = 0.3f;
         heatMap.heatMax = 2048;
@@ -98,9 +154,18 @@ public class HeatmapFragment extends Fragment {
 //            heatMap.addPoint(0.27315f, 0.28704f, p);
 //            heatMap.addPoint(0.50000f, 0.32639f, p);
 
+        // switch that toggles live mode
+        sw = view.findViewById(R.id.swtLive);
+        sw.setOnClickListener((View v) ->{
+            if (sw.isChecked()){
+                GattHandler.runnable = heatMapper::dataChanged;
+                Toast.makeText(getContext(), "Live node is now ON ", Toast.LENGTH_SHORT).show();
 
-
-        GattHandler.runnable = heatMapper::dataChanged;
+            }else{
+                GattHandler.runnable = ()->{};
+                Toast.makeText(getContext(), "Live node is now OFF ", Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
 

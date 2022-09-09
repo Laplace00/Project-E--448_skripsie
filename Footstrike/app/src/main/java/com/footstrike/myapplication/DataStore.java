@@ -52,6 +52,19 @@ public class DataStore implements HeatMap.IHeatMappable {
         return data;
     }
 
+    public void copyFrom(DataStore data){
+
+        this.archVal = data.archVal;
+        this.met5Val = data.met5Val;
+        this.met3Val = data.met3Val;
+        this.met1Val = data.met1Val;
+        this.heelrVal = data.heelrVal;
+        this.heellVal = data.heellVal;
+        this.halluxVal = data.halluxVal;
+        this.toesVal = data.toesVal;
+    }
+
+
     @Override
     public float getHeat(int index) {
         float out = 69;

@@ -14,7 +14,7 @@ import android.widget.TextView;
 import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
-    public static File file;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,10 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
 //        GattHandler.init(this);
 //        GattHandler.init(getApplicationContext());
-
-        file = new File(MainActivity.this.getFilesDir(),"records");
-        file.mkdir();
-
+        FileHelper.init(this);
 
         ViewPager2 viewPager2 = findViewById(R.id.viewPager2);
 
