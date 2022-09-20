@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 
 import com.footstrike.myapplication.heatmap.HeatMap;
 
+import java.sql.Array;
+
 public class DataStore implements HeatMap.IHeatMappable {
     public float archVal;
     public float met5Val;
@@ -13,13 +15,14 @@ public class DataStore implements HeatMap.IHeatMappable {
     public float heellVal;
     public float halluxVal;
     public float toesVal;
+    public float steps;
     public long timeStamp;
 
 
     @NonNull
     @Override
     public String toString() {
-        return timeStamp + "," + archVal + "," + met5Val + "," + met3Val + "," + met1Val + "," + heelrVal + "," + heellVal + "," + halluxVal + "," + toesVal;
+        return timeStamp + "," + archVal + "," + met5Val + "," + met3Val + "," + met1Val + "," + heelrVal + "," + heellVal + "," + halluxVal + "," + toesVal + "," + steps;
     }
 
     public DataStore(String string){
@@ -33,6 +36,7 @@ public class DataStore implements HeatMap.IHeatMappable {
         heellVal = Float.parseFloat(strings[6]);
         halluxVal = Float.parseFloat(strings[7]);
         toesVal = Float.parseFloat(strings[8]);
+        steps = Float.parseFloat(strings[9]);
     }
 
     public DataStore() {
@@ -49,6 +53,7 @@ public class DataStore implements HeatMap.IHeatMappable {
         data.heellVal = this.heellVal;
         data.halluxVal = this.halluxVal;
         data.toesVal = this.toesVal;
+        data.steps = this.steps;
         return data;
     }
 
@@ -62,48 +67,48 @@ public class DataStore implements HeatMap.IHeatMappable {
         this.heellVal = data.heellVal;
         this.halluxVal = data.halluxVal;
         this.toesVal = data.toesVal;
+        this.steps = data.steps;
     }
 
 
     @Override
     public float getHeat(int index) {
-        float out = 69;
-        switch(index){
-            case 0:
-                out = heellVal;
-                break;
-
-            case 1:
-                out = heelrVal;
-                break;
-
-            case 2:
-                out = archVal;
-                break;
-
-            case 3:
-                out = met1Val;
-                break;
-
-            case 4:
-                out = met3Val;
-                break;
-
-            case 5:
-                out = met5Val;
-                break;
-
-            case 6:
-                out = halluxVal;
-                break;
-
-            case 7:
-                out = toesVal;
-                break;
-
-        }
+        float out = getADC(index);
         return 4096 - out ;
     }
+    public float getADC(int index) {
+
+        switch(index){
+            case 0:
+                return heellVal;
+            case 1:
+                return heelrVal;
+            case 2:
+                return archVal;
+            case 3:
+                return met1Val;
+            case 4:
+                return met3Val;
+            case 5:
+                return met5Val;
+            case 6:
+                return halluxVal;
+            case 7:
+            default:
+                return toesVal;
+
+        }
+    }
+    public float getForce(int index) {
+        final double a = 1060.84;
+        final double b = 2937.21;
+        final double c = -0.0117044;
+        return (float) Math.max(0,Math.log((getADC(index)-a)/b) / c);
+    }
+
+
+
+
 }
 
 

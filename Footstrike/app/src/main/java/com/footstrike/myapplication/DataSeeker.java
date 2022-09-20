@@ -19,6 +19,7 @@ public class DataSeeker extends androidx.appcompat.widget.AppCompatSeekBar {
     private boolean isPlaying = true;
 
     private int currentFrame = 0;
+    private long firstFrameTime = 0;
     private int frames = 100;
 
     private boolean shouldRepeat = true;
@@ -69,6 +70,8 @@ public class DataSeeker extends androidx.appcompat.widget.AppCompatSeekBar {
                     } else {
                         currentFrame = i;
                         sleepTimeLeft = 0;
+                        long currentFrameTime = dataAccessor.getTimeStamp(currentFrame);
+                        dataAccessor.displayFrame(currentFrame,currentFrameTime-firstFrameTime);
                     }
 
                 }
@@ -93,6 +96,7 @@ public class DataSeeker extends androidx.appcompat.widget.AppCompatSeekBar {
         this.dataAccessor = dataAccessor;
         this.frames = dataAccessor.getTotalFrames();
         this.setMax(this.frames - 1);
+        this.firstFrameTime = dataAccessor.getTimeStamp(0);
         playService.submit(this::playbackLoop);
 
     }
@@ -105,10 +109,11 @@ public class DataSeeker extends androidx.appcompat.widget.AppCompatSeekBar {
         }
         while (isPlaying) {
 
-            dataAccessor.displayFrame(currentFrame);
+
 
             this.setProgress(currentFrame);
             long currentFrameTime = dataAccessor.getTimeStamp(currentFrame);
+            dataAccessor.displayFrame(currentFrame,currentFrameTime-firstFrameTime);
             int next = (currentFrame + 1) % frames;
             long nextFrameTime = dataAccessor.getTimeStamp(next);
 
@@ -178,7 +183,7 @@ public class DataSeeker extends androidx.appcompat.widget.AppCompatSeekBar {
 
         public long getTimeStamp(int i);
 
-        public void displayFrame(int i);
+        public void displayFrame(int i ,long timeStart);
     }
 
 

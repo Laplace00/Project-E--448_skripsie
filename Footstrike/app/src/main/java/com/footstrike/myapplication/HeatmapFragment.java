@@ -14,10 +14,12 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Handler;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.footstrike.myapplication.heatmap.HeatMap;
@@ -57,6 +59,8 @@ public class HeatmapFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_heatmap, container, false);
         DataSeeker dataSeeker = view.findViewById(R.id.dataSeeker);
         HeatmapView heatMapper = view.findViewById(R.id.heatmapView);
+        TextView time = view.findViewById(R.id.txtTime);
+
 
 
         view.findViewById(R.id.btnloadFile).setOnClickListener((View v)->{
@@ -80,9 +84,14 @@ public class HeatmapFragment extends Fragment {
                         }
 
                         @Override
-                        public void displayFrame(int i) {
+                        public void displayFrame(int i ,long timeStart) {
                             GattHandler.data.copyFrom(StatsFragment.dataList.get(i));
-                            runOnUIThread(heatMapper::dataChanged);
+                            runOnUIThread(()->{
+                                heatMapper.dataChanged();
+                                time.setText(String.valueOf(timeStart));
+
+
+                            });
                         }
                     });
 
@@ -105,13 +114,6 @@ public class HeatmapFragment extends Fragment {
         view.findViewById(R.id.btnStartStop).setOnClickListener((View v)->{
             dataSeeker.playPause();
         });
-
-
-
-
-
-
-
 
 
 
@@ -154,16 +156,20 @@ public class HeatmapFragment extends Fragment {
 //            heatMap.addPoint(0.27315f, 0.28704f, p);
 //            heatMap.addPoint(0.50000f, 0.32639f, p);
 
+        final CustomTableLayout tableForce = view.findViewById(R.id.tableForce);
         // switch that toggles live mode
         sw = view.findViewById(R.id.swtLive);
         sw.setOnClickListener((View v) ->{
             if (sw.isChecked()){
-                GattHandler.runnable = heatMapper::dataChanged;
-                Toast.makeText(getContext(), "Live node is now ON ", Toast.LENGTH_SHORT).show();
+                GattHandler.runnable = ()->{
+                    heatMapper.dataChanged();
+                    tableForce.updateData();
+                };
+                Toast.makeText(getContext(), "Live mode is now ON ", Toast.LENGTH_SHORT).show();
 
             }else{
                 GattHandler.runnable = ()->{};
-                Toast.makeText(getContext(), "Live node is now OFF ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Live mode is now OFF ", Toast.LENGTH_SHORT).show();
             }
         });
 

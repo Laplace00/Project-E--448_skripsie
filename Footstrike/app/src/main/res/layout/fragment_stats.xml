@@ -28,49 +28,61 @@
             android:id="@+id/txtArch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="Arch:" />
 
         <TextView
             android:id="@+id/txtMet5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="Met5:" />
 
         <TextView
             android:id="@+id/txtMet3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="Met3" />
 
         <TextView
             android:id="@+id/txtMet1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="Met1:" />
 
         <TextView
             android:id="@+id/txtHeelR"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="HeelR:" />
 
         <TextView
             android:id="@+id/txtHeelL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="HeelR:" />
 
         <TextView
             android:id="@+id/txtHallux"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="Hallux:" />
 
         <TextView
             android:id="@+id/txtToes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="Toes:" />
+
+        <TextView
+            android:id="@+id/txtSteps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Steps:" />
+
+        <TextView
+            android:id="@+id/txtCadence"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cadence:" />
 
     </LinearLayout>
 </FrameLayout>

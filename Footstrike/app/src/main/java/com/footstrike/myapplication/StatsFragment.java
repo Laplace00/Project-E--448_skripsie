@@ -34,9 +34,12 @@ public class StatsFragment extends Fragment {
     public  TextView heelLVal;
     public  TextView halluxVal;
     public  TextView toesVal;
+    public  TextView stepsVal;
+    public static int steps = 0;
     public static ArrayList<DataStore> dataList;
     public boolean recordData = false;
     private String m_Text = "";
+    public boolean down =false;
 
 
     public StatsFragment() {
@@ -55,6 +58,15 @@ public class StatsFragment extends Fragment {
 
 
         View out = inflater.inflate(R.layout.fragment_stats, container, false);
+        archVal = out.findViewById(R.id.txtArch);
+        met5Val = out.findViewById(R.id.txtMet5);
+        met3Val = out.findViewById(R.id.txtMet3);
+        met1Val = out.findViewById(R.id.txtMet1);
+        heelRVal = out.findViewById(R.id.txtHeelR);
+        heelLVal = out.findViewById(R.id.txtHeelL);
+        halluxVal = out.findViewById(R.id.txtHallux);
+        toesVal = out.findViewById(R.id.txtToes);
+        stepsVal = out.findViewById(R.id.txtSteps);
 
 
 
@@ -93,7 +105,9 @@ public class StatsFragment extends Fragment {
                             }
                             writer.flush();
                             writer.close();
+                            GattHandler.data.steps = 0;
                             Toast.makeText(out.getContext(), "Stopped recording data and saved to text file", Toast.LENGTH_SHORT).show();
+
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -102,6 +116,7 @@ public class StatsFragment extends Fragment {
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        GattHandler.data.steps = 0;
                         Toast.makeText(out.getContext(), "Stopped recording data and file not saved", Toast.LENGTH_SHORT).show();
                         dialog.cancel();
                     }
@@ -115,32 +130,38 @@ public class StatsFragment extends Fragment {
 
         });
 
-        GattHandler.runnableTxt = () -> {
-            archVal.setText(String.valueOf(GattHandler.data.archVal));
-            met5Val.setText(String.valueOf(GattHandler.data.met5Val));
-            met3Val.setText(String.valueOf(GattHandler.data.met3Val));
-            met1Val.setText(String.valueOf(GattHandler.data.met1Val));
-            heelRVal.setText(String.valueOf(GattHandler.data.heelrVal));
-            heelLVal.setText(String.valueOf(GattHandler.data.heellVal));
-            halluxVal.setText(String.valueOf(GattHandler.data.halluxVal));
-            toesVal.setText(String.valueOf(GattHandler.data.toesVal));
-            if(recordData) {
-                dataList.add(GattHandler.data.copy());
-            }
+        GattHandler.runnableTxt = this::run;
 
-
-        };
-        archVal = out.findViewById(R.id.txtArch);
-        met5Val = out.findViewById(R.id.txtMet5);
-        met3Val = out.findViewById(R.id.txtMet3);
-        met1Val = out.findViewById(R.id.txtMet1);
-        heelRVal = out.findViewById(R.id.txtHeelR);
-        heelLVal = out.findViewById(R.id.txtHeelL);
-        halluxVal = out.findViewById(R.id.txtHallux);
-        toesVal = out.findViewById(R.id.txtToes);
 
 
         // Inflate the layout for this fragment
         return out;
+    }
+
+    private void run() {
+        archVal.setText("Arch:" + GattHandler.data.archVal);
+        met5Val.setText("Met5:" + GattHandler.data.met5Val);
+        met3Val.setText("Met3:" + GattHandler.data.met3Val);
+        met1Val.setText("Met1:" + GattHandler.data.met1Val);
+        heelRVal.setText("HeelR:" + GattHandler.data.heelrVal);
+        heelLVal.setText("HeelL:" + GattHandler.data.heellVal);
+        halluxVal.setText("Hallux:" + GattHandler.data.halluxVal);
+        toesVal.setText("Toes:" + GattHandler.data.toesVal);
+        stepsVal.setText("Steps:" + GattHandler.data.steps);
+        if (recordData) {
+            if (down == false && GattHandler.data.met1Val < 3000 && GattHandler.data.met3Val < 3000) {
+                GattHandler.data.steps++;
+                down = true;
+
+            }
+
+            if (down == true && GattHandler.data.met1Val > 3500 && GattHandler.data.met3Val > 3500) {
+                down = false;
+            }
+
+            dataList.add(GattHandler.data.copy());
+        }
+
+
     }
 }
