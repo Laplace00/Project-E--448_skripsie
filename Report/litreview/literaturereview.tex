@@ -1,13 +1,39 @@
-\graphicspath{{introduction/fig/}}
+\graphicspath{{litreview/fig/}}
 
 \chapter{Literature Review}
 \label{chap:litreview}
+\section{Foot strike patterns and Gait analysis}
+\label{sec:Gait}
 
-\section{BLE}
+
+\section{Bluetooth Low Energy BLE}
 \label{sec:ble}
+
+\subsection{How Does BLE Work?}
+\label{sec:howdoesblework}
+
+When using Bluetooth Low Energy it is important to know the roles of each device. In all BLE application there are two roles which are the \textbf{central} and the \textbf{peripheral} devices. The peripheral device will be the device that broadcasts or advertises information and the central device will be scanning for information. A good visual representation of how BLE works is to think of an advertising board where the peripheral device keeps pinning new info onto the board and the central device scans the board and uses the information available. These two devices have their own unique addresses. The peripheral will be advertising information to any near devices while the central will for any device or devices that are advertising information. When the central device finds the advertised information a connection attempt is made. Once a connection is established, the central device can start read and writing information from and to the peripheral device.
+
+\subsection{Services, Characteristics and Descriptor}
+\label{sec:servicesandcharacteristics}
+ The information transfer system for BLE can be seen in the following hierarchical order. A service is a collection of characteristics and each characteristic has a descriptor that describes the characteristic. See the basic illustration below \ref{fig:ble_roles}.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width = 0.5\linewidth]{blehierarchy.png}
+    \caption{Basic hierarchy of BLE}
+    \label{fig:ble_roles}
+\end{figure}
+
+Each \textbf{service} has its own unique identifying code called a UUID. This is to allow one peripheral device to have multiple services. This code can be 128-bit long for each service. A service can also be seen as a group of capabilities. For example, a smartwatch that can measure hart rate, temperature and track your GPS location. These three capabilities can be grouped under one service and can be called the activity service. This method of grouping information allows the central device to better understand and use the information that the peripheral is advertising.
+
+The capabilities mentioned in the above example are better known as \textbf{characteristics}. Each characteristic has its own unique identifying code called a UUID. This is to allow one service to have multiple characteristics. A characteristic can be seen as a single capability. For example, the characteristic of measuring heart rate. This characteristic can be seen as a single capability of the activity service. 
+
+Each characteristic can have a \textbf{descriptor} that describes the characteristic. A descriptor can be seen as a single piece of information about the characteristic. For example, the descriptor of the characteristic of measuring heart rate can be the range of the heart rate measurement. This descriptor can be seen as a single piece of information about the characteristic of measuring heart rate.
+
+
 
 \section{Android application}
 \label{sec:android}
 
-\
 
