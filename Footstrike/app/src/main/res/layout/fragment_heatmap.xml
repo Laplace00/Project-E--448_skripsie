@@ -28,17 +28,38 @@
             android:layout_height="wrap_content"
             android:text="TextView" />
 
-        <Button
-            android:id="@+id/btnStartStop"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Start/Stop" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/btnStartStop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="Start/Stop" />
+
+            <Button
+                android:id="@+id/btnConnectBLE"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="Connect to Device" />
+
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnRecordData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Record Data" />
 
             <Button
                 android:id="@+id/btnloadFile"
@@ -61,12 +82,25 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <com.footstrike.myapplication.CustomTableLayout
-                android:id="@+id/tableForce"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-            </com.footstrike.myapplication.CustomTableLayout>
+                <com.footstrike.myapplication.CustomTableLayout
+                    android:id="@+id/tableForce"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                </com.footstrike.myapplication.CustomTableLayout>
+
+                <TextView
+                    android:id="@+id/txtSteps"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Steps:" />
+
+            </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

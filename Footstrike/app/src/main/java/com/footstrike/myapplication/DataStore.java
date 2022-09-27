@@ -80,17 +80,17 @@ public class DataStore implements HeatMap.IHeatMappable {
 
         switch(index){
             case 0:
-                return heellVal;
+                return archVal ;
             case 1:
-                return heelrVal;
+                return met5Val ;
             case 2:
-                return archVal;
+                return met3Val;
             case 3:
                 return met1Val;
             case 4:
-                return met3Val;
+                return heelrVal;
             case 5:
-                return met5Val;
+                return heellVal;
             case 6:
                 return halluxVal;
             case 7:
@@ -100,10 +100,19 @@ public class DataStore implements HeatMap.IHeatMappable {
         }
     }
     public float getForce(int index) {
-        final double a = 1060.84;
-        final double b = 2937.21;
-        final double c = -0.0117044;
-        return (float) Math.max(0,Math.log((getADC(index)-a)/b) / c);
+        final double a;
+        final double b;
+        final double c;
+        if(index == 0 || index == 1){
+            a = 1516.6;
+            b = 2585.26;
+            c = -0.00992992;
+        }else {
+            a = 1060.84;
+            b = 2937.21;
+            c = -0.0117044;
+        }
+        return (float) Math.max(0, Math.log((getADC(index) - a) / b) / c);
     }
 
 

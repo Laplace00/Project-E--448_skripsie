@@ -24,6 +24,21 @@ public class MainActivity extends AppCompatActivity {
 //        GattHandler.init(getApplicationContext());
         FileHelper.init(this);
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
         ViewPager2 viewPager2 = findViewById(R.id.viewPager2);
 
         FragmentStateAdapter adapter = new FragmentStateAdapter(this) {
@@ -31,8 +46,6 @@ public class MainActivity extends AppCompatActivity {
             public Fragment createFragment(int position) {
                 switch (position) {
                     case 0:
-                        return new StatsFragment();
-                    case 1:
                         return new HeatmapFragment(viewPager2);
                 }
                 return null;
@@ -40,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public int getItemCount() {
-                return 2;
+                return 1;
             }
         };
         viewPager2.setAdapter(adapter);
