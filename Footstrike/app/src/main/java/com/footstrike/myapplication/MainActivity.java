@@ -54,18 +54,12 @@ public class MainActivity extends AppCompatActivity  implements HBRecorderListen
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_main);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
-        this.getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        setContentView(R.layout.activity_main);
 
 //        GattHandler.init(this);
 //        GattHandler.init(getApplicationContext());
@@ -88,13 +82,13 @@ public class MainActivity extends AppCompatActivity  implements HBRecorderListen
 
 
         recordButton.setOnClickListener((View v)->{
-            this.getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+//            this.getWindow().getDecorView().setSystemUiVisibility(
+//                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+//                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 
             if(!recordData) {
                 recordButton.setText("Stop Recording");
@@ -139,7 +133,8 @@ public class MainActivity extends AppCompatActivity  implements HBRecorderListen
                             writer.close();
                             writerInternal.close();
                             GattHandler.data.steps = 0;
-                            //Toast.makeText(this, "Stopped recording data and saved to text file", Toast.LENGTH_SHORT).show();
+                            stepsView.setText("Steps: " + GattHandler.data.steps);
+                            Toast.makeText(getApplicationContext(), "Stopped recording data and saved to text file", Toast.LENGTH_SHORT).show();
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -152,7 +147,7 @@ public class MainActivity extends AppCompatActivity  implements HBRecorderListen
                         GattHandler.data.steps = 0;
                         stepsView.setText("Steps: " + GattHandler.data.steps);
 
-                        //Toast.makeText(this, "Stopped recording data and file not saved", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Stopped recording data and file not saved", Toast.LENGTH_SHORT).show();
                         dialog.cancel();
                     }
                 });
@@ -225,7 +220,7 @@ public class MainActivity extends AppCompatActivity  implements HBRecorderListen
         // OpenGL heatmap init
         HeatMap heatMap = heatMapper.getHeatmap();
         heatMap.pointRadius = 0.3f;
-        heatMap.heatMax = 2048;
+        heatMap.heatMax = 100;
 
         heatMap.addPoint(0.62269f,1.08565f, GattHandler.data);
         heatMap.addPoint(0.24769f,0.58565f, GattHandler.data);
@@ -302,13 +297,13 @@ public class MainActivity extends AppCompatActivity  implements HBRecorderListen
     void startRecording(){
         if (recordData) {
             stepsView.setText("Steps: " + GattHandler.data.steps);
-            if (down == false && GattHandler.data.met1Val < 3000 && GattHandler.data.met3Val < 3000) {
+            if (down == false && GattHandler.data.met1Val < 50 && GattHandler.data.met3Val < 50) {
                 GattHandler.data.steps++;
                 down = true;
 
             }
 
-            if (down == true && GattHandler.data.met1Val > 3500 && GattHandler.data.met3Val > 3500) {
+            if (down == true && GattHandler.data.met1Val > 55 && GattHandler.data.met3Val > 55) {
                 down = false;
             }
 

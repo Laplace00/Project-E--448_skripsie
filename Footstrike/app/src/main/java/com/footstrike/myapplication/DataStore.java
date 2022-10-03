@@ -4,8 +4,6 @@ import androidx.annotation.NonNull;
 
 import com.footstrike.myapplication.heatmap.HeatMap;
 
-import java.sql.Array;
-
 public class DataStore implements HeatMap.IHeatMappable {
     public float archVal;
     public float met5Val;
@@ -73,10 +71,9 @@ public class DataStore implements HeatMap.IHeatMappable {
 
     @Override
     public float getHeat(int index) {
-        float out = getADC(index);
-        return 4096 - out ;
+        return getForce(index);
     }
-    public float getADC(int index) {
+    public float getForce(int index) {
 
         switch(index){
             case 0:
@@ -99,20 +96,40 @@ public class DataStore implements HeatMap.IHeatMappable {
 
         }
     }
-    public float getForce(int index) {
+//    public float getForce(int index) {
+//        final double a;
+//        final double b;
+//        final double c;
+//        if(index == 0 || index == 1){
+//            a = 1519.06;
+//            b = 2545.44;
+//            c = -0.0101873;
+//        }else {
+//            a = 1060.84;
+//            b = 2937.21;
+//            c = -0.0117044;
+//        }
+//        return (float) Math.max(0, Math.log((getADC(index) - a) / b) / c);
+//    }
+
+    public static float calculateForceArduino(float value) {
         final double a;
         final double b;
         final double c;
-        if(index == 0 || index == 1){
-            a = 1519.06;
-            b = 2545.44;
-            c = -0.0101873;
-        }else {
-            a = 1060.84;
-            b = 2937.21;
-            c = -0.0117044;
-        }
-        return (float) Math.max(0, Math.log((getADC(index) - a) / b) / c);
+        a = 1060.84;
+        b = 2937.21;
+        c = -0.0117044;
+        return (float) Math.max(0, Math.log((value - a) / b) / c);
+    }
+
+    public static float calculateForceADS(float value) {
+        final double a;
+        final double b;
+        final double c;
+        a = 1519.06;
+        b = 2545.44;
+        c = -0.0101873;
+        return (float) Math.max(0, Math.log((value - a) / b) / c);
     }
 
 

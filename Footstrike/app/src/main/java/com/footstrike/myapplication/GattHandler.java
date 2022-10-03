@@ -154,14 +154,14 @@ public class GattHandler {
                 hallux = buffer.getFloat();
                 toes = buffer.getFloat();
             }
-            data.archVal  = arch;
-            data.met5Val = met5;
-            data.met3Val = met3;
-            data.met1Val = met1;
-            data.heelrVal = heelR;
-            data.heellVal = heelL;
-            data.halluxVal = hallux;
-            data.toesVal = toes;
+            data.archVal  = DataStore.calculateForceADS(arch);
+            data.met5Val = DataStore.calculateForceADS(met5);
+            data.met3Val = DataStore.calculateForceArduino(met3);
+            data.met1Val = DataStore.calculateForceArduino(met1);
+            data.heelrVal = DataStore.calculateForceArduino(heelR);
+            data.heellVal = DataStore.calculateForceArduino(heelL);
+            data.halluxVal = DataStore.calculateForceArduino(hallux);
+            data.toesVal = DataStore.calculateForceArduino(toes);
 
             runOnUIThread(()->{
                 runnable.run();
