@@ -17,7 +17,7 @@ public class CustomTableLayout extends LinearLayout {
     TextView[] txtPositions = new TextView[9];
     public TextView[] txtForceNewtonVals = new TextView[9];
     public TextView[] txtForcePercentVals = new TextView[9];
-    String[] positionNames = new String[]{"Position","Arch:","Met5:","Met3:","Met1:","HeelR:","HeelL:","Hallux:","Toes:"};
+    String[] positionNames = new String[]{"Position \n","Arch:","Met5:","Met3:","Met1:","HeelR:","HeelL:","Hallux:","Toes:"};
 
     public CustomTableLayout(@NonNull Context context) {
         super(context);
@@ -71,8 +71,8 @@ public class CustomTableLayout extends LinearLayout {
             txtForcePercentVals[i].setText("0");
             forcePercent.addView(txtForcePercentVals[i]);
         }
-        txtForceNewtonVals[0].setText("Force (n)");
-        txtForcePercentVals[0].setText("Force (%)");
+        txtForceNewtonVals[0].setText("Force (N) \n");
+        txtForcePercentVals[0].setText("Force\nDistribution(%) ");
     }
 
     void updateData(){

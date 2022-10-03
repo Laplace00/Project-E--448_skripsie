@@ -104,9 +104,9 @@ public class DataStore implements HeatMap.IHeatMappable {
         final double b;
         final double c;
         if(index == 0 || index == 1){
-            a = 1516.6;
-            b = 2585.26;
-            c = -0.00992992;
+            a = 1519.06;
+            b = 2545.44;
+            c = -0.0101873;
         }else {
             a = 1060.84;
             b = 2937.21;
