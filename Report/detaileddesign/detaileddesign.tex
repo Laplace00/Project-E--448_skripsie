@@ -1,14 +1,46 @@
 \chapter{Detailed Design}
 \label{chap:systemdesign}
 
-\section{Device}
-\subsection{Arduino}
-\subsection{BLE setup}
-\subsection{ADC} 
+\section{Software}
+\subsection{Arduino Code}
+\subsubsection{Setup}
 
-\section{Android application}
+When using Arduino devices there will be a setup() method which will run once only when the device starts. The Serial communications and baud-rate are specified with the Serial.begin() function. Thereafter the Arduino pin modes are configured to activate the internal pull up as this is needed for measuring the analog values from the IEE foot sensor. The pin mode can be configured using the pinMode(). This function takes two arguments which is the pin number and the mode. To use the ADC readings send by the ADS1115 via I2C, An object of the Adafruit$\_$ADS1115  class was created and called ads. Now within the setup() method ads.begin method can be triggered to do all the necessary I2C setup for the ADS1115.
+
+Next, the BLE setup commences. Arduino has a good library namely, ArduinoBLE.h, which provides all the needed function to setup BLE for the Arduino device. See code snippet \ref{blesetup}
+\begin{lstlisting}[language=c++, caption=BLE Setup, label=blesetup]
+    // BLE setup
+    BLE.setLocalName("Arduino Nano 33 BLE (Peripheral)");
+    BLE.setAdvertisedService(gaitService);
+    gaitService.addCharacteristic(gaitCharacteristic1);
+    gaitService.addCharacteristic(gaitCharacteristic2);
+    BLE.addService(gaitService);
+    BLE.advertise();
+    if (!BLE.begin()) {
+      Serial.println("BLE error-Ble could not start");
+      while (1);
+    }
+\end{lstlisting}
+
+
+
+The "gaitService", "gaitCharacteristic1" and  "gaitCharacteristic2" object, used in code snippet \ref{blesetup}, are created outside the setup() function. The ArduinoBLE library provides the BLEService and BLECharacteristic classes to create these objects. The BLEService class only requires the service UUID as an argument to create an object. The BLECharacteristic class requires the characteristic UUID, the properties of the characteristic and the size of the value that the characteristic will represent. The properties can be specified by doing or operation with predefined constants provided by the ArduinoBLE library.
+
+\subsubsection{ADC} 
+
+Unfortunately the Arduino NANO 33 only has 6 ADC pins and therefor an external ADC module, the ADS1115, was used to send the other 2 ADC values across I2C. The Adafruit library has a class with a method called readADCSingleEnded(). This method is used to get the ADC reading from the ADS1115. This method requires the pin number of the ADS1115 as a property. The ADS1115 has a 16 bit resolution and therefor it is required to use the map() function to scale the 16 bit ADC value down to 12 bit. The remaining 6 ADC readings can be retrieved using the analogRead() function and passing the pin number as an argument.
+
+All the ADC operations that need to happen are within the getReadings() function. This function stores 8 analog readings in 8 floats which is then copied across two byte arrays each having a length of 16 bytes. The is to minimize the use of characteristics to only two characteristics.
+
+\subsubsection{BLE}
+
+In the main loop() function the Arduino will continuesly wait for a connection from a central device. An if statement has a BLEDevice object as condition and the condition will be true as soon as an connection is established. Within the if statement is a while loop which will loop while the central device is connected. Inside the while loop the getReadings() function is called to get all the ADC readins then these readings are written to each characteristic with the writeValue method from the BLECharacteristic class objects that were created. These characteristics are now advertising data to the central device
+
+
+
+\subsection{Android application code}
 
 \subsection{Overview of user interface}
 
-\subsection{d}
+\section{Hardware}
 

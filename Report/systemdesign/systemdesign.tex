@@ -1,14 +1,53 @@
+\graphicspath{{systemdesign/fig/}}
 \chapter{System Design}
 \label{chap:systemdesign}
 
 \section{System overview}
 
+The prototype foot sensor device was designed and built by Jared Adams who is the predecessor of this skripsie topic.
+The LiFePO4 battery supplies power to all the components of the device. These components are an Arduino Nano 33 Ble, an ADS115 ADC module and the IEE foot sensor. The battery has a nominal voltage of 3.2VDC and is charged by a battery charge management controller namely, the MCP73123.
 
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width = 0.9\linewidth]{System.png}
+    \caption{System Diagram}
+    \label{fig:sysdiagram}
+\end{figure}
 \section{Device components}
+
 \subsection{Arduino Nano 33 BLE}
+The Nordic nRF52840 SoC processor features a configurable 12-bit, 200 ksps, 8channel ADC.
+The ADC has a configurable internal analog reference voltage.
+
+Analog inputs have programmable internal pull-up resistors.
+
+
+The NINA-B306 is a Bluetooth 5 low energy module that allows for low power
+consumption when sending data over Bluetooth wireless standard.
+
+
+Absolute supply voltage ratings of
+
 
 \subsection{LiFePO4 Battery}
-
+A lithium iron phosphate battery is a type of lithium iron battery that uses lithium iron
+phosphate as its cathode material. The LiFePO4 battery has a maximum charge cut-off of
+3.65V and a minimum charge cut-off of 2.5V. LiFePO4 batteries importantly feature a
+flat discharge curve with a nominal output voltage of 3.2V, as seen in Figure 3.4. This
+provides a stable supply voltage, VBAT, for the system and a stable reference voltage, Vref,
+for the ADCs.
 \subsection{IEE Smart Footwear Sensor}
+
+The IEE Smart Footwear Sensor (Section 2.2.1) consists of 8 separate high-dynamic FSR
+cells which each measure a pressure range of 100 mbar up to 7 bar. The foot sensor has
+11 pins1
+- 1 supply voltage pin, 2 ground pins and 8 output pins. The structure of the
+foot sensor is essentially a resistive divider network with a fixed resistor, Rfix, made from
+conductive ink with a value in range of 2 kΩ < Rfix < 4 kΩ . The foot sensor is supplied
+with VBAT and the 8 outputs are connected to the Arduino and DS1115 modules. Each
+individual sensor has a typical activation response time of 2-3ms and can measure a wide
+pressure range which make it more than sufficient for the desired application.
+
 
 \section{App components}
