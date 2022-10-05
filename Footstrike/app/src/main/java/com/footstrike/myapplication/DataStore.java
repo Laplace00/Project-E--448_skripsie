@@ -23,6 +23,7 @@ public class DataStore implements HeatMap.IHeatMappable {
         return timeStamp + "," + archVal + "," + met5Val + "," + met3Val + "," + met1Val + "," + heelrVal + "," + heellVal + "," + halluxVal + "," + toesVal + "," + steps;
     }
 
+    // Method to store all the data that is to be written to a file
     public DataStore(String string){
         String[] strings = string.split(",");
         timeStamp = Long.parseLong(strings[0]);
@@ -37,10 +38,12 @@ public class DataStore implements HeatMap.IHeatMappable {
         steps = Float.parseFloat(strings[9]);
     }
 
+    // method to get the current time in milliseconds
     public DataStore() {
         timeStamp = System.currentTimeMillis();
     }
 
+    // method to make a copy of the all ready stored data
     public DataStore copy(){
         DataStore data = new DataStore();
         data.archVal = this.archVal;
@@ -55,6 +58,7 @@ public class DataStore implements HeatMap.IHeatMappable {
         return data;
     }
 
+    // method to copy from the all ready stored data
     public void copyFrom(DataStore data){
 
         this.archVal = data.archVal;
@@ -111,7 +115,7 @@ public class DataStore implements HeatMap.IHeatMappable {
 //        }
 //        return (float) Math.max(0, Math.log((getADC(index) - a) / b) / c);
 //    }
-
+    // method that calculates the force from the ARDUINO ADC readings
     public static float calculateForceArduino(float value) {
         final double a;
         final double b;
@@ -121,7 +125,7 @@ public class DataStore implements HeatMap.IHeatMappable {
         c = -0.0117044;
         return (float) Math.max(0, Math.log((value - a) / b) / c);
     }
-
+    // method that calculates the force from the ARDUINO external ADS ADC readings
     public static float calculateForceADS(float value) {
         final double a;
         final double b;

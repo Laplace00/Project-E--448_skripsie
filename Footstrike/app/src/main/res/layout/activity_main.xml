@@ -113,7 +113,8 @@
                     app:layout_constraintDimensionRatio="0.5136741973840666:1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0">
 
                     <com.footstrike.myapplication.heatmap.HeatmapView
                         android:id="@+id/heatmapView"

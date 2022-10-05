@@ -8,6 +8,7 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 
+//This class contains more GSLS biolerplate code
 public class HeatmapRenderer implements GLSurfaceView.Renderer {
 
     private final HeatMap heatMap;

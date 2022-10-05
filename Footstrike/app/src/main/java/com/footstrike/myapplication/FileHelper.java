@@ -26,15 +26,15 @@ public class FileHelper {
         return root.list();
     }
 
-    public static void fileTest() throws IOException {
-
-        File f = new File(root, "test.txt");
-        FileWriter writer = new FileWriter(f);
-
-        writer.write("Ek is cool");
-        writer.flush();
-        writer.close();
-    }
+//    public static void fileTest() throws IOException {
+//
+//        File f = new File(root, "test.txt");
+//        FileWriter writer = new FileWriter(f);
+//
+//        writer.write("Ek is cool");
+//        writer.flush();
+//        writer.close();
+//    }
 
 
     public static File getRoot() {

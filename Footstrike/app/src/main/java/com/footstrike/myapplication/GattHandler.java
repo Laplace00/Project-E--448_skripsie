@@ -126,14 +126,14 @@ public class GattHandler {
         @Override
         public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
             super.onDescriptorWrite(gatt, descriptor, status);
-            if(done){
+
                 gatt.setCharacteristicNotification(transChar2, true);
                 BluetoothGattDescriptor desc2 = transChar2.getDescriptors().get(0);
                 desc2.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
 
                 gatt.writeDescriptor(desc2);
-                done = false;
-            }
+
+
         }
 
         @Override

@@ -20,7 +20,7 @@ public class HeatMap {
     private int mProgram;
 
     private static final int COORDS_PER_VERTEX = 3;
-
+    // Coordinates of the plane on which to draw the heatmap
     private static final float[] squareCoords = {
             -1, 1, 0.0f,   // top left
             -1, -1, 0.0f,   // bottom left
@@ -28,30 +28,35 @@ public class HeatMap {
             1, 1, 0.0f,  // top right
     };
 
-
+    // Point coordinates packed into a 1d array
     static float[] points = new float[0];
-
+    // order to draw vertices
     private final short[] drawOrder = {0, 1, 2, 0, 2, 3}; // order to draw vertices
-
+    // Width and height of the heatmap map view
     private float width;
     private float height;
-
+    // List of points to plot
     private final List<HeatMapPoint> heatMapPoints = new ArrayList<>();
+
+    // Radius and maximum value for each point
     public float pointRadius = 0.3f;
     public float heatMax = 10f;
 
+    // GSLS code for vertices and colours
     private final String vertexShaderCode;
     private final String fragmentShaderCode;
 
-
+    // Constructor requires Resources to access shader and vertex code
     public HeatMap(Resources res) {
         vertexShaderCode = (new Scanner(res.openRawResource(R.raw.heatmap_v))).useDelimiter("\\A").next();
         fragmentShaderCode = (new Scanner(res.openRawResource(R.raw.heatmap_f))).useDelimiter("\\A").next();
     }
-
+    // Initialize the heatmap with the widht and height of the view size
     public void init(float width, float height) {
         this.height = height;
         this.width = width;
+
+        // GSLS initialization code
         ByteBuffer bb = ByteBuffer.allocateDirect(
                 squareCoords.length * 4);
         bb.order(ByteOrder.nativeOrder());
@@ -66,6 +71,7 @@ public class HeatMap {
         drawListBuffer.put(drawOrder);
         drawListBuffer.position(0);
 
+        // Actually load the shader code and retrieve their OpenGL handles
         int vertexShader = HeatmapRenderer.loadShader(
                 GLES20.GL_VERTEX_SHADER,
                 vertexShaderCode);
@@ -81,12 +87,13 @@ public class HeatMap {
         GLES20.glLinkProgram(mProgram);
     }
 
+    // Add a new point to the heatmap at the specified coordinates
     public void addPoint(float x, float y, IHeatMappable heatMappable) {
         heatMapPoints.add(new HeatMapPoint(x, y, heatMappable));
         initPoints();
     }
 
-
+    // Actually draw the heatmap using OpenGL
     public void draw(float[] mvpMatrix) {
 
         GLES20.glUseProgram(mProgram);
@@ -105,7 +112,7 @@ public class HeatMap {
         int mMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
         GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mvpMatrix, 0);
 
-        //Load constants to GL
+        //Load constants to GL, reuse the id for memory efficiency
         int id = GLES20.glGetUniformLocation(mProgram, "iResolution");
         GLES20.glUniform2f(id, width, height);
 
@@ -129,11 +136,11 @@ public class HeatMap {
         GLES20.glDisableVertexAttribArray(mPositionHandle);
     }
 
-
+    // Interface for retrieving the value point
     public interface IHeatMappable {
         float getHeat(int index);
     }
-
+    // Class that represents a single point on the heatmap
     private static class HeatMapPoint {
         private final float x, y;
         private final IHeatMappable heatMappable;
@@ -144,7 +151,7 @@ public class HeatMap {
             this.heatMappable = heatMappable;
         }
     }
-
+    // Initializes the the 1d point array from the HeatMapPoint list
     public void initPoints() {
         points = new float[heatMapPoints.size() * 3];
         int i = 0;
@@ -156,6 +163,7 @@ public class HeatMap {
         }
     }
 
+    // This function should be called every time the data in heatMapPoints changes
     public void dataChanged() {
         int index = 0;
         int i = 2;

@@ -1,9 +1,6 @@
 package com.footstrike.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
-import androidx.viewpager2.widget.ViewPager2;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -47,9 +44,11 @@ public class MainActivity extends AppCompatActivity  implements HBRecorderListen
     public static ArrayList<DataStore> dataList;
     public boolean recordData = false;
     private String m_Text = "";
-    public boolean down =false;
+    public boolean stepDone = true;
     public TextView stepsView;
     Button recordButton;
+    Button connectButton;
+    Button loadButton;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,44 +64,45 @@ public class MainActivity extends AppCompatActivity  implements HBRecorderListen
 //        GattHandler.init(getApplicationContext());
         FileHelper.init(this);
         DataSeeker dataSeeker = findViewById(R.id.dataSeeker);
+
         //Init HBRecorder
         hbRecorder = new HBRecorder(this, this);
 
-
-
+        // OpenGL heatmap init
         HeatmapView heatMapper = findViewById(R.id.heatmapView);
-        TextView time = findViewById(R.id.txtTime);
+        HeatMap heatMap = heatMapper.getHeatmap();
+        heatMap.pointRadius = 0.3f;
+        heatMap.heatMax =60;
+
+        heatMap.addPoint(0.62269f,1.08565f, GattHandler.data);
+        heatMap.addPoint(0.65278f,0.66435f, GattHandler.data);
+        heatMap.addPoint(0.45139f,0.61111f, GattHandler.data);
+        heatMap.addPoint(0.24769f,0.58565f, GattHandler.data);
+        heatMap.addPoint(0.62037f,1.63657f, GattHandler.data);
+        heatMap.addPoint(0.43519f,1.67130f, GattHandler.data);
+        heatMap.addPoint(0.27315f,0.28704f, GattHandler.data);
+        heatMap.addPoint(0.50000f,0.32639f, GattHandler.data);
+
+
+       // Views and Buttons
         stepsView = findViewById(R.id.txtSteps);
+        connectButton = findViewById(R.id.btnConnectBLE);
         recordButton = findViewById(R.id.btnRecordData);
+        loadButton = findViewById(R.id.btnloadFile);
+        sw = findViewById(R.id.swtLive);
+        TextView time = findViewById(R.id.txtTime);
         final CustomTableLayout tableForce = findViewById(R.id.tableForce);
 
-        findViewById(R.id.btnConnectBLE).setOnClickListener((View v)->{
+        connectButton.setOnClickListener((View v)->{
             GattHandler.init(getApplicationContext());
         });
 
 
         recordButton.setOnClickListener((View v)->{
-//            this.getWindow().getDecorView().setSystemUiVisibility(
-//                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-//                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-//                            | View.SYSTEM_UI_FLAG_FULLSCREEN
-//                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-
             if(!recordData) {
-                recordButton.setText("Stop Recording");
-                recordData = true;
+                //Start Recording
                 dataList = new ArrayList<>();
-                startRecordingScreen();
 
-                Toast.makeText(this, "Started recording data", Toast.LENGTH_SHORT).show();
-            }else{
-                recordButton.setText("Start Recording");
-                recordData = false;
-                if (hbRecorder.isBusyRecording()) {
-                    hbRecorder.stopScreenRecording();
-                }
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("Enter file name");
@@ -118,27 +118,11 @@ public class MainActivity extends AppCompatActivity  implements HBRecorderListen
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         m_Text = input.getText().toString();
-                        try {
-                            File outfile = new File(FileHelper.getRoot(), m_Text + ".footstrike");
-                            File outfileInternal = new File(FileHelper.getinternal(),m_Text + ".txt");
-                            PrintStream writer = new PrintStream(outfile);
-                            PrintStream writerInternal = new PrintStream(outfileInternal);
-                            for (DataStore data: dataList
-                            ) {
-                                writer.println(data);
-                                writerInternal.println(data);
-                            }
-                            writer.flush();
-                            writerInternal.flush();
-                            writer.close();
-                            writerInternal.close();
-                            GattHandler.data.steps = 0;
-                            stepsView.setText("Steps: " + GattHandler.data.steps);
-                            Toast.makeText(getApplicationContext(), "Stopped recording data and saved to text file", Toast.LENGTH_SHORT).show();
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        hbRecorder.setFileName(m_Text);
+                        recordData = true;
+                        startRecordingScreen();
+                        recordButton.setText("Stop Recording");
+                        Toast.makeText(getApplicationContext(), "Started recording data", Toast.LENGTH_SHORT).show();
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -147,13 +131,43 @@ public class MainActivity extends AppCompatActivity  implements HBRecorderListen
                         GattHandler.data.steps = 0;
                         stepsView.setText("Steps: " + GattHandler.data.steps);
 
-                        Toast.makeText(getApplicationContext(), "Stopped recording data and file not saved", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Recording Cancelled", Toast.LENGTH_SHORT).show();
                         dialog.cancel();
                     }
                 });
 
                 builder.show();
 
+            }else{
+                //Stop recording
+                recordButton.setText("Start Recording");
+                recordData = false;
+                if (hbRecorder.isBusyRecording()) {
+                    hbRecorder.stopScreenRecording();
+                }
+
+                try {
+                    File outfile = new File(FileHelper.getRoot(), m_Text + ".csv");
+                    File outfileInternal = new File(FileHelper.getinternal(),m_Text + ".csv");
+
+                    PrintStream writer = new PrintStream(outfile);
+                    PrintStream writerInternal = new PrintStream(outfileInternal);
+                    for (DataStore data: dataList
+                    ) {
+                        writer.println(data);
+                        writerInternal.println(data);
+                    }
+                    writer.flush();
+                    writerInternal.flush();
+                    writer.close();
+                    writerInternal.close();
+                    GattHandler.data.steps = 0;
+                    stepsView.setText("Steps: " + GattHandler.data.steps);
+                    Toast.makeText(getApplicationContext(), "Stopped recording and saved data", Toast.LENGTH_SHORT).show();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
 
             }
@@ -162,10 +176,11 @@ public class MainActivity extends AppCompatActivity  implements HBRecorderListen
 
 
 
-        findViewById(R.id.btnloadFile).setOnClickListener((View v)->{
+        loadButton.setOnClickListener((View v)->{
             FilePickDialog d = new FilePickDialog(this);
             d.setFileSelectedHandler(file -> {
                 try {
+                    sw.setChecked(false);
                     Scanner s = new Scanner(file);
                     dataList = new ArrayList<DataStore>();
                     while(s.hasNextLine()){
@@ -217,50 +232,6 @@ public class MainActivity extends AppCompatActivity  implements HBRecorderListen
 
 
 
-        // OpenGL heatmap init
-        HeatMap heatMap = heatMapper.getHeatmap();
-        heatMap.pointRadius = 0.3f;
-        heatMap.heatMax = 100;
-
-        heatMap.addPoint(0.62269f,1.08565f, GattHandler.data);
-        heatMap.addPoint(0.24769f,0.58565f, GattHandler.data);
-        heatMap.addPoint(0.45139f,0.61111f, GattHandler.data);
-        heatMap.addPoint(0.65278f,0.66435f, GattHandler.data);
-        heatMap.addPoint(0.43519f,1.67130f, GattHandler.data);
-        heatMap.addPoint(0.62037f,1.63657f, GattHandler.data);
-        heatMap.addPoint(0.27315f,0.28704f, GattHandler.data);
-        heatMap.addPoint(0.50000f,0.32639f, GattHandler.data);
-
-
-
-
-
-//        HeatMap.IHeatMappable p = (i) ->
-//        {
-//
-//            return (float) (5 * (1 + Math.cos(i*Math.PI/6f+(counter) / 20f)));
-//
-//        };
-//
-//        ScheduledExecutorService s = Executors.newSingleThreadScheduledExecutor();
-//        s.scheduleAtFixedRate(() -> {
-//
-//                    counter++;
-//                    new Handler(getMainLooper()).post(() -> {
-//                        heatMapper.dataChanged();
-//                    });}, 0, 10, TimeUnit.MILLISECONDS);
-//
-//            heatMap.addPoint(0.43519f, 1.67130f, p);
-//            heatMap.addPoint(0.62037f, 1.63657f, p);
-//            heatMap.addPoint(0.62269f, 1.08565f, p);
-//            heatMap.addPoint(0.24769f, 0.58565f, p);
-//            heatMap.addPoint(0.45139f, 0.61111f, p);
-//            heatMap.addPoint(0.65278f, 0.66435f, p);
-//            heatMap.addPoint(0.27315f, 0.28704f, p);
-//            heatMap.addPoint(0.50000f, 0.32639f, p);
-
-
-
         defaultrunnable = ()->{
             heatMapper.dataChanged();
             tableForce.updateData();
@@ -270,7 +241,6 @@ public class MainActivity extends AppCompatActivity  implements HBRecorderListen
         GattHandler.runnable = defaultrunnable;
 
         // switch that toggles live mode
-        sw = findViewById(R.id.swtLive);
         sw.setOnClickListener((View v) ->{
             if (sw.isChecked()){
                 GattHandler.runnable = defaultrunnable;
@@ -297,14 +267,14 @@ public class MainActivity extends AppCompatActivity  implements HBRecorderListen
     void startRecording(){
         if (recordData) {
             stepsView.setText("Steps: " + GattHandler.data.steps);
-            if (down == false && GattHandler.data.met1Val < 50 && GattHandler.data.met3Val < 50) {
+            if (stepDone == false && GattHandler.data.met1Val < 50 && GattHandler.data.met3Val < 50) {
                 GattHandler.data.steps++;
-                down = true;
+                stepDone = true;
 
             }
 
-            if (down == true && GattHandler.data.met1Val > 55 && GattHandler.data.met3Val > 55) {
-                down = false;
+            if (stepDone == true && GattHandler.data.met1Val > 55 && GattHandler.data.met3Val > 55) {
+                stepDone = false;
             }
 
             dataList.add(GattHandler.data.copy());
