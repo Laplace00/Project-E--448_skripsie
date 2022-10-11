@@ -11,13 +11,33 @@ In the modern day, jogging is one of the most popular physical activities. Peopl
 
 
 \section{Problem Statement}
-There are not many commercial devices that can determine a user's foot strike patterns.
+Develop an application that can use data from a prototype device and display the foot strike patterns from this data. Do additional calculations to show the ground force applied with each step. The raw data should be processed and saved to be displayed and used in useful manners such as videos and graphs. 
 \section{Objectives}
 % TODO: this sucks
-The objective of this project is to use a prototype wearable device that captures the pressure applied to a grid of pressure sensing resistors. The prototype has been build by a previous student and is capable of capturing the data. The device has capabilities of transmitting the data wirelessly to a mobile phone. The main object is then to use the data captured and transmit it to a smartphone. An android application will then be designed and development that can process and display this data in a useful manner. The application can then be used by medical experts to assist in medical assessments like the Gait analysis. 
+The objective of this project is to use a prototype wearable device that captures the pressure applied to a grid of pressure sensing resistors. The prototype has been build by a previous student and is capable of capturing the data from FSR cells and transmitting the data via BLE. An mobile application should then be developed to receive this data, process it and display or save it in useful ways.The application can then be used by medical experts to assist in medical assessments like the Gait analysis. 
 \section{Scope and Limitations}
 
+The scope of this project is to only design and develop an andriod application that displays the foot strike patterns captured by the prototype device. As the device was built by a predecessor there are some design flaws that had to be considered:
+\begin{itemize}
+    \item Very large device
+    \item The Arduino used does not have enough ADC channels and an extra component was added taking up more space. 
+    \item The battery of the device is very large and adds a large amount of weights to a device that should be wearable.
+    \item The charging circuit is not in working order and the battery had to be manually charged.
+  \end{itemize}
+
 \section{Overview of the report}
+
+Chapter 2 Lit review
+
+Chapter 3 System design
+
+Chapter 4 Detailed design
+
+Chapter 5 Tests
+
+Chapter 6 Summary conclusions
+
+
 \section{Section heading}
 
 This is some section with two table in it: Table~\ref{tbl:exemplars} and Table~\ref{tbl:abx_speaker}.
