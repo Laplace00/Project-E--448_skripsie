@@ -56,24 +56,23 @@ public class MainActivity extends AppCompatActivity  implements HBRecorderListen
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-
         setContentView(R.layout.activity_main);
-
-//        GattHandler.init(this);
-//        GattHandler.init(getApplicationContext());
+        // init files
         FileHelper.init(this);
+
+        // Add dataseker view
         DataSeeker dataSeeker = findViewById(R.id.dataSeeker);
 
         //Init HBRecorder
         hbRecorder = new HBRecorder(this, this);
 
         // OpenGL heatmap init
-        HeatmapView heatMapper = findViewById(R.id.heatmapView);
+        HeatmapView heatMapper = findViewById(R.id.heatmapView); // init heatmap view
         HeatMap heatMap = heatMapper.getHeatmap();
         heatMap.pointRadius = 0.3f;
         heatMap.heatMax =60;
 
+        // add data points
         heatMap.addPoint(0.62269f,1.08565f, GattHandler.data);
         heatMap.addPoint(0.65278f,0.66435f, GattHandler.data);
         heatMap.addPoint(0.45139f,0.61111f, GattHandler.data);
@@ -84,13 +83,13 @@ public class MainActivity extends AppCompatActivity  implements HBRecorderListen
         heatMap.addPoint(0.50000f,0.32639f, GattHandler.data);
 
 
-       // Views and Buttons
-        stepsView = findViewById(R.id.txtSteps);
-        connectButton = findViewById(R.id.btnConnectBLE);
-        recordButton = findViewById(R.id.btnRecordData);
-        loadButton = findViewById(R.id.btnloadFile);
-        sw = findViewById(R.id.swtLive);
-        TextView time = findViewById(R.id.txtTime);
+       // Views and Buttons and switches
+        stepsView = findViewById(R.id.txtSteps); // basic text view for steps
+        connectButton = findViewById(R.id.btnConnectBLE); // button to connect to arduino
+        recordButton = findViewById(R.id.btnRecordData);// button to start and stop recording
+        loadButton = findViewById(R.id.btnloadFile); // button to load previous recorded data
+        sw = findViewById(R.id.swtLive); // switch that toggles between prerecorded data or live data stream
+        TextView time = findViewById(R.id.txtTime); // shows timestamp of loaded data
         final CustomTableLayout tableForce = findViewById(R.id.tableForce);
 
         connectButton.setOnClickListener((View v)->{
@@ -148,7 +147,7 @@ public class MainActivity extends AppCompatActivity  implements HBRecorderListen
 
                 try {
                     File outfile = new File(FileHelper.getRoot(), m_Text + ".csv");
-                    File outfileInternal = new File(FileHelper.getinternal(),m_Text + ".csv");
+                    File outfileInternal = new File(FileHelper.getInternal(),m_Text + ".csv");
 
                     PrintStream writer = new PrintStream(outfile);
                     PrintStream writerInternal = new PrintStream(outfileInternal);
@@ -231,7 +230,7 @@ public class MainActivity extends AppCompatActivity  implements HBRecorderListen
         });
 
 
-
+        // when live mode is active we want this to be the runnable
         defaultrunnable = ()->{
             heatMapper.dataChanged();
             tableForce.updateData();
@@ -267,13 +266,13 @@ public class MainActivity extends AppCompatActivity  implements HBRecorderListen
     void startRecording(){
         if (recordData) {
             stepsView.setText("Steps: " + GattHandler.data.steps);
-            if (stepDone == false && GattHandler.data.met1Val < 50 && GattHandler.data.met3Val < 50) {
+            if (stepDone == false && GattHandler.data.met1Val < 10 && GattHandler.data.met3Val < 10) {
                 GattHandler.data.steps++;
                 stepDone = true;
 
             }
 
-            if (stepDone == true && GattHandler.data.met1Val > 55 && GattHandler.data.met3Val > 55) {
+            if (stepDone == true && GattHandler.data.met1Val > 25 || GattHandler.data.met3Val > 25) {
                 stepDone = false;
             }
 

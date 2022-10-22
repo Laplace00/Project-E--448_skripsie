@@ -7,8 +7,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+// This class helps managing the file directories
 public class FileHelper {
-
 
     private static File root;
     private static File internal;
@@ -41,7 +41,7 @@ public class FileHelper {
         return root;
     }
 
-    public static File getinternal() {
+    public static File getInternal() {
         return internal;
     }
 }

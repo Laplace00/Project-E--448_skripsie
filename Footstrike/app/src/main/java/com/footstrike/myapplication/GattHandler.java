@@ -56,17 +56,14 @@ public class GattHandler {
 
     //Initialises connection
     public static void init(Context context) {
-
-
+        // run function on separate thread
         new Thread(() ->
         {
-            BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-            BluetoothDevice device = bluetoothAdapter.getRemoteDevice(deviceMAC);
+            BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter(); // use to perform fundamental Bluetooth tasks
+            BluetoothDevice device = bluetoothAdapter.getRemoteDevice(deviceMAC); // specify our device MAC
             device.connectGatt(context, false, gattCallback);
 
         }).start();
-
-
     }
 
     public static void write(int s){
@@ -131,7 +128,7 @@ public class GattHandler {
                 BluetoothGattDescriptor desc2 = transChar2.getDescriptors().get(0);
                 desc2.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
 
-                gatt.writeDescriptor(desc2);
+                gatt.writeDescriptor(desc2);  // write the second desc after the first has finished
 
 
         }
@@ -139,10 +136,11 @@ public class GattHandler {
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
             super.onCharacteristicChanged(gatt, characteristic);
-
+            // store characteristic values in a Buffer
             ByteBuffer buffer = ByteBuffer.wrap(characteristic.getValue());
+            // order the buffer
             buffer.order(ByteOrder.LITTLE_ENDIAN);
-
+            // check which characteristic triggered this method
             if (characteristic.getUuid().equals(deviceServiceCharacteristicUuid1)) {
                 arch  = buffer.getFloat();
                 met5 = buffer.getFloat();
@@ -154,14 +152,15 @@ public class GattHandler {
                 hallux = buffer.getFloat();
                 toes = buffer.getFloat();
             }
-            data.archVal  = DataStore.calculateForceADS(arch);
-            data.met5Val = DataStore.calculateForceADS(met5);
-            data.met3Val = DataStore.calculateForceArduino(met3);
-            data.met1Val = DataStore.calculateForceArduino(met1);
-            data.heelrVal = DataStore.calculateForceArduino(heelR);
-            data.heellVal = DataStore.calculateForceArduino(heelL);
-            data.halluxVal = DataStore.calculateForceArduino(hallux);
-            data.toesVal = DataStore.calculateForceArduino(toes);
+            // Stored data in data store object
+            data.archVal  = CalculateForce.calculateForceADS(arch);
+            data.met5Val = CalculateForce.calculateForceADS(met5);
+            data.met3Val = CalculateForce.calculateForceArduino(met3);
+            data.met1Val = CalculateForce.calculateForceArduino(met1);
+            data.heelrVal = CalculateForce.calculateForceArduino(heelR);
+            data.heellVal = CalculateForce.calculateForceArduino(heelL);
+            data.halluxVal = CalculateForce.calculateForceArduino(hallux);
+            data.toesVal = CalculateForce.calculateForceArduino(toes);
 
             runOnUIThread(()->{
                 runnable.run();

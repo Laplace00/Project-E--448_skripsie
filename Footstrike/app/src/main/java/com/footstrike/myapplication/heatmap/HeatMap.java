@@ -51,7 +51,7 @@ public class HeatMap {
         vertexShaderCode = (new Scanner(res.openRawResource(R.raw.heatmap_v))).useDelimiter("\\A").next();
         fragmentShaderCode = (new Scanner(res.openRawResource(R.raw.heatmap_f))).useDelimiter("\\A").next();
     }
-    // Initialize the heatmap with the widht and height of the view size
+    // Initialize the heatmap with the width and height of the view size
     public void init(float width, float height) {
         this.height = height;
         this.width = width;
