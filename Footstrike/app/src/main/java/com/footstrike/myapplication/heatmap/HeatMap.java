@@ -56,7 +56,7 @@ public class HeatMap {
         this.height = height;
         this.width = width;
 
-        // GSLS initialization code
+        // GLSL initialization code
         ByteBuffer bb = ByteBuffer.allocateDirect(
                 squareCoords.length * 4);
         bb.order(ByteOrder.nativeOrder());
