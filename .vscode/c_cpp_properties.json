@@ -30,9 +30,8 @@
                 "C:\\Users\\dewal\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\mbed_nano\\3.2.0\\variants\\ARDUINO_NANO33BLE",
                 "C:\\Users\\dewal\\OneDrive\\Documents\\Arduino\\libraries\\Adafruit_ADS1X15",
                 "C:\\Users\\dewal\\OneDrive\\Documents\\Arduino\\libraries\\Adafruit_BusIO",
-                "C:\\Users\\dewal\\OneDrive\\Documents\\Arduino\\libraries\\ArduinoBLE",
-                "C:\\Users\\dewal\\OneDrive\\Documents\\Arduino\\libraries\\",
                 "C:\\Users\\dewal\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\mbed_nano\\3.2.0\\libraries\\Wire",
+                "C:\\Users\\dewal\\OneDrive\\Documents\\Arduino\\libraries\\ArduinoBLE\\src",
                 "C:\\Users\\dewal\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\mbed_nano\\3.2.0\\libraries\\SPI",
                 "C:\\Users\\dewal\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\mbed_nano\\3.2.0\\cores\\arduino\\api\\deprecated",
                 "C:\\Users\\dewal\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\mbed_nano\\3.2.0\\cores\\arduino\\api\\deprecated-avr-comp",
@@ -41,8 +40,7 @@
                 "c:\\users\\dewal\\appdata\\local\\arduino15\\packages\\arduino\\tools\\arm-none-eabi-gcc\\7-2017q4\\arm-none-eabi\\include\\c++\\7.2.1\\backward",
                 "c:\\users\\dewal\\appdata\\local\\arduino15\\packages\\arduino\\tools\\arm-none-eabi-gcc\\7-2017q4\\lib\\gcc\\arm-none-eabi\\7.2.1\\include",
                 "c:\\users\\dewal\\appdata\\local\\arduino15\\packages\\arduino\\tools\\arm-none-eabi-gcc\\7-2017q4\\lib\\gcc\\arm-none-eabi\\7.2.1\\include-fixed",
-                "c:\\users\\dewal\\appdata\\local\\arduino15\\packages\\arduino\\tools\\arm-none-eabi-gcc\\7-2017q4\\arm-none-eabi\\include",
-                "${workspaceFolder}/**"
+                "c:\\users\\dewal\\appdata\\local\\arduino15\\packages\\arduino\\tools\\arm-none-eabi-gcc\\7-2017q4\\arm-none-eabi\\include"
             ],
             "forcedInclude": [
                 "C:\\Users\\dewal\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\mbed_nano\\3.2.0\\cores\\arduino\\Arduino.h"

@@ -1,5 +1,6 @@
 {
-    "sketch": "Arduino\\singleended\\singleended.ino",
+    "sketch": "Arduino\\main\\main.ino",
     "board": "arduino:mbed_nano:nano33ble",
-    "output": "../ArduinoOutput"
+    "output": "../ArduinoOutput",
+    "port": "COM4"
 }

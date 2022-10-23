@@ -28,7 +28,7 @@ public class HeatMap {
             1, 1, 0.0f,  // top right
     };
 
-    // Point coordinates packed into a 1d array
+    // Point coordinates packed into a 1d array.
     static float[] points = new float[0];
     // order to draw vertices
     private final short[] drawOrder = {0, 1, 2, 0, 2, 3}; // order to draw vertices
