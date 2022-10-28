@@ -1,13 +1,13 @@
 \graphicspath{{systemdesign/fig/}}
-\chapter{System Design}
+\chapter{System Design Review}
 \label{chap:systemdesign}
 
 \section{System overview}
 
-The prototype foot sensor device was designed and built by Jared Adams who is the predecessor of this skripsie topic.
-The LiFePO4 battery supplies power to all the components of the prototype device. These components are an Arduino Nano 33 Ble, an ADS115 ADC module and the IEE foot sensor. The battery has a nominal voltage of 3.2VDC and is charged by a battery charge management controller namely, the MCP73123.
+The prototype foot sensor device was designed and built by Jared Adams, the predecessor of this skripsie topic.
+The LiFePO4 battery supplies power to all the components of the prototype device. These components are an Arduino Nano 33 Ble, an ADS115 ADC module, and the IEEE foot sensor. The battery has a nominal voltage of 3.2VDC and is charged by a battery charge management controller, namely, the MCP73123.
 
-The prototype device will then use BLE to transmit ADC data to an Android device. The Android device will make use of this data via an application written in Java. This application will consist of various methods that do calculations with the data, display the data in various ways and save the data.
+The prototype device will then use BLE to transmit ADC data to an Android device. The Android device will make use of this data via an application written in Java. This application will consist of various methods that perform calculations with the data, display the data in various ways, and save the data.
 
 
 \begin{figure}[!h]
@@ -19,18 +19,50 @@ The prototype device will then use BLE to transmit ADC data to an Android device
 \section{Device components}
 
 \subsection{Arduino Nano 33 BLE}
-The Arduino Nano 33 BLE is small Arduino Nano device ideal for wearable devices. The Nano 33 BLE has a powerful processor, the nRF52840 from Nordic Semiconductors, a 32-bit ARM Cortex-M4 CPU running at 64 MHz. The main processor also includes Bluetooth Low Energy for a low power consumption solution to transmit data wirelessly. The board also contains 8 3v3 12bit analog input pins (2 of which are designated for I$^2$C pins) and 14 digital input?output pins.
+The Arduino Nano 33 BLE is a small Arduino Nano device ideal for wearable devices. The Nano 33 BLE has a powerful processor, the nRF52840 from Nordic Semiconductors, a 32-bit ARM Cortex-M4 CPU running at 64 MHz. The central processor also includes Bluetooth Low Energy for a low-power consumption solution to transmit data wirelessly. The board also contains eight 3.3-volt 12bit analog input pins (two of which are designated for I$^2$C pins) and 14 digital input/output pins. 
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width = 0.3\linewidth]{nano33.png}
+    \caption{Arduino Nano 33 BLE}
+    \label{fig:arduino}
+\end{figure}
 
 
 \subsection{LiFePO4 Battery}
-A lithium iron phosphate battery is a type of rechargeable battery. The battery specifically uses LiFePO4 as cathode material and graphitic carbon electrodes as the anode.The LiFePO4 battery has a maximum charge cut-off of 3.65V and a minimum charge cut-off of 2.5V. LiFePO4 batteries has flat discharge curve with a nominal output voltage of 3.2V. This battery was used to provide a stable supply voltage for the system and a stable reference voltage for the ADCs.
+A lithium iron phosphate battery is a type of rechargeable battery. This battery uses LiFePO4 as cathode material and graphite carbon electrodes as the anode and has a maximum charge cut-off of 3.65V and a minimum charge cut-off of 2.5V. LiFePO4 batteries have a flat discharge curve with a nominal output voltage of 3.2V. This battery was used to provide a stable supply voltage for the system and a stable reference voltage for the ADCs. See the datasheet \cite{antbatt2019} for all the battery characteristics as needed.
 
+\begin{figure}[h]
+
+    \begin{subfigure}{0.5\textwidth}
+    \includegraphics[width=0.9\linewidth]{battery.png} 
+    \caption{Picture of the physical battery}
+    \label{fig:subim1}
+    \end{subfigure}
+    \begin{subfigure}{0.6\textwidth}
+    \includegraphics[width=1\linewidth]{celldimensions.png}
+    \caption{Battery dimensions in mm}
+    \label{fig:subim2}
+    \end{subfigure}
+    
+    \caption{LiFePO4 Battery}
+    \label{fig:image2}
+    \end{figure}
 \subsection{IEE Smart Footwear Sensor}
 
 The IEE Smart Footwear Sensor consists of 8 separate high-dynamic FSR
-cells. The foot sensor has 1 pins1- 1 supply voltage pin, 2 ground pins and 8 output pins. The structure of the foot sensor is essentially a resistive divider network with a fixed resistor Rfix, made from conductive ink with a value in range of 2 kΩ $<$ Rfix $<$ 4 kΩ . The foot sensor is supplied with power by the LiFePO4 Battery.
+cells. The foot sensor has eleven pins. One supply voltage pin, two ground pins, and eight output pins. The structure of the foot sensor is essentially a resistive divider network with a fixed resistor $R_{fix}$, made from conductive ink with a value of 2 $k\Omega$ $<$ $R_{fix}$ $<$ 4 $k\Omega$. The foot sensor is supplied with power by the LiFePO4 Battery.
 
+\subsection{ADS1115 Precision ADC module}
 
-\section{App components}
+This component increased the number of analog pins in the system. The ADS1115 adds four additional 16-bit analog pins. This component communicates with the Arduino via I$^2$C and makes the extra analog pins available to the Arduino.
 
-The main feature of the application is the heatmap. This feature allows users to see their foot strike patterns in a visual way. Along with this the user can see the approximated force exerted on each FSR cell as well as the distribution across the whole of the 8 IEE Smart Footwear sensor. All of this data and info can be recorded in a csv format and video format. The csv file can also be played back for the user in app.
+\subsection{Battery Charger}
+The charger circuit uses an MCP73123 battery management controller chip with additional conditioning circuitry. The MCP73123 has a regulated 3.6V output which would be sufficient to charge the battery. An internal overvoltage protection circuit monitors the input voltage and shuts down the charger when it exceeds the 6.5V threshold. A constant current and voltage are achieved by controlling an internal P-channel MOSFET in the linear region. This controlled voltage is then connected to the battery terminals. The MCP73123 has charge detection, which allows it to automatically charge the battery once the battery voltage drops below 3.2V. See \ref{fig:charger} for the circuit diagram.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width = 0.9\linewidth]{batterycharger.png}
+    \caption{Battery charger circuit}
+    \label{fig:charger}
+\end{figure}

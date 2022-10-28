@@ -4,8 +4,11 @@
 \label{chap:litreview}
 \section{Foot strike patterns and Gait analysis}
 \label{sec:Gait}
-Running is a popular everyday physical activity across the world. Many statics proves this\cite{statistaresearchdepartment2020}. Although running is a simple activity it involves complex movements an integration of muscles, joints and varies body parts. This leads to running being a common physical activity that commonly cause injuries. In depth studies on foot strike patterns elsewhere \cite{doi:10.2519/jospt.2015.6019}, \cite{CAVANAGH1980397
-}, \cite{matheuso.almeidaptphdirenes.davisptphdalexandred.lopesptphd2015}, \cite{lauram.andersondanielr.bonannoharvif.hart&christianj.barton2020} review the basics of foot strike patterns and the biomechanics of running. This is beyond the scope of this technical report, but these reviews do provide relevant information to better understand what cause s these injuries. These studies do indicate that considering the foot and foot motion during walking and running is very crucial to understanding why running can commonly lead to injuries. It has been proven in studies such as \cite{kennethp.clarklaurencej.ryanpeterg.weyand2014} that running performance, energy requirements and musculoskeletal stresses are directly related to foot strike patterns and action-reaction force between the limb and the ground. Many factors like foot strike patterns, footwear conditions, running speed and environment conditions can have many effects on the biomechanics of a human during running. According to \cite{matheuso.almeidaptphdirenes.davisptphdalexandred.lopesptphd2015} there are three primary foot strike patterns namely: forefoot, rearfoot (heel strike) and midfoot. Forefoot  striking is when the antrerior region of the foot strikes the ground first. Midfoot striking is when the posterior and anterior parts of the foot hit the ground simultaneously, and rearfoot or heel strike is when the heel or posterior area of the foot strikes the ground initially. According to \cite{marEfootstrike} and \cite{matheuso.almeidaptphdirenes.davisptphdalexandred.lopesptphd2015} there is a high prevalence of heel strikers for both mid-distance and ling-distance runners. This would explain why running shoes are heavily padded at the heel part of the shoe. This makes the landing proses more comfortable.
+Running is a popular everyday physical activity worldwide, and statistics prove this\cite{statistaresearchdepartment2020}. Although running is a simple activity, it involves complex movements and integrating muscles, joints, and various body parts. These complex movements cause running to be a common physical activity that typically causes injuries. In-depth studies on foot strike patterns elsewhere \cite{doi:10.2519/jospt.2015.6019}, \cite{CAVANAGH1980397
+}, \cite{matheuso.almeidaptphdirenes.davisptphdalexandred.lopesptphd2015}, \cite{lauram.andersondanielr.bonannoharvif.hart&christianj.barton2020} review the basics of foot strike patterns and the biomechanics of running. This is beyond the scope of this technical report, but these reviews provide relevant information to understand better what causes these injuries. These studies indicate that considering foot motion during walking and running is crucial to understanding why running can commonly lead to injuries. It has been proven in studies such as \cite{kennethp.clarklaurencej.ryanpeterg.weyand2014} that running performance, energy requirements, and musculoskeletal stresses are directly related to foot strike patterns and action-reaction force between the limb and the ground. 
+
+Many factors like foot strike patterns, footwear conditions, running speed, and environmental conditions can affect a human's biomechanics during running. According to \cite{matheuso.almeidaptphdirenes.davisptphdalexandred.lopesptphd2015} there are three primary foot strike patterns, namely: forefoot, rearfoot (heel strike), and midfoot. Forefoot striking is when the anterior region of the foot strikes the ground first. Midfoot striking is when the posterior and anterior parts of the foot hit the ground simultaneously, and rearfoot or heel strike is when the heel or posterior area of the foot strikes the ground initially. According to \cite{marEfootstrike} \cite{matheuso.almeidaptphdirenes.davisptphdalexandred.lopesptphd2015} there is a high prevalence of heel strikers for both mid-distance and long-distance runners. This would explain why running shoes are heavily padded at the heel part of the shoe. This makes the landing processes more comfortable. See Figure \ref{fig:footstrike} for a good visual representation of the different strikes. There are many benefits of knowing one's foot strike patterns. This is why foot strike patterns are crucial in the Gait analysis
+\clearpage
 \begin{figure}[!htb]
     \centering
     \includegraphics[width = 0.7\linewidth]{Screenshot 2022-10-11 153343.png}
@@ -13,18 +16,47 @@ Running is a popular everyday physical activity across the world. Many statics p
     \label{fig:footstrike}
 \end{figure}
 
+Gait analysis studies human motion using observer instruments to measure body movement, body mechanics, and muscle activity. Gait analysis is commonly used in biomechanics to help athletes prevent or recover from injuries. The gait analysis identifies posture- or movement-related problems that can cause injuries. This allows professionals to advise and train athletes to move more efficiently in their sport, mainly when running or walking. \cite{Baker2006} states that foot pressures are regularly used in the systematic physical examination of athletes, such as the Gait analysis. Further reading shows that foot strike patterns, step rate, and posture can be combined for gait modifications and to reduce the impact of the load on body parts during running. The study \cite{HUANG2019102} from the Journal of Biomechanics demonstrates this with a series of experiments where runners were analyzed as seen in figure \ref{fig:examplegait}  
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width = 0.7\linewidth]{examplegait.jpg}
+    \caption{Example of how gait analysis can be for runners}
+    \label{fig:examplegait}
+\end{figure}
 
 
 \newpage
 \section{Technology used for Gait analysis}
+\label{technologygair}
 
+\begin{table}[!h]
+    \mytable
+    \caption{Summary of running gait parameters that can be measured by different sensors or systems \cite{higginsonbrian2009}.}
+    \begin{tabularx}{\linewidth}{@{}lC@{}}
+        \toprule
+        Sensor\textbackslash System     & Measurements and outcomes \\
+        \midrule
+        Motion analysis systems                       & Linear and angular velocity, and acceleration. The body orientation and positioning.\\
+        Force platforms    & Ground reaction force and joint moment. Power can be measured by using motion analysis along with force platforms. \\
+        Pressure sensors        & Pressure distribution of the foot. Vertical force, the center of pressure, and spatiotemporal measurements. \\
+        Electromyography  & Muscle activation and muscle fatigue.\\
+        Accelerometers  & Acceleration and orientation.n\\
+        Electrogoniometers  & Relative joint angles.\\
+        Gyroscopes  & Orientation, angular velocity, and acceleration.\\
+        \bottomrule
+    \end{tabularx}
+    \label{tbl:exemplars}
+\end{table}
+\clearpage
 \section{Bluetooth Low Energy BLE}
 \label{sec:ble}
 
 \subsection{How Does BLE Work?}
 \label{sec:howdoesblework}
 
-When using Bluetooth Low Energy it is important to know the roles of each device. In all BLE application there are two roles which are the \textbf{central} and the \textbf{peripheral} devices. The peripheral device will be the device that broadcasts or advertises information and the central device will be scanning for information. A good visual representation of how BLE works is to think of an advertising board where the peripheral device keeps pinning new info onto the board and the central device scans the board and uses the information available. These two devices have their own unique addresses. The peripheral will be advertising information to any near devices while the central will for any device or devices that are advertising information. When the central device finds the advertised information a connection attempt is made. Once a connection is established, the central device can start read and writing information from and to the peripheral device.
+When using Bluetooth Low Energy, it is essential to know the roles of each device. In all BLE applications, there are two roles: the \textbf{central} and the \textbf{peripheral} devices. \cite{josebagur2022} The peripheral device will be the device that broadcasts or advertises information, and the central device will be scanning for information. A good visual representation of how BLE works is to think of an advertising board where the peripheral device keeps pinning new info onto the board, and the central device scans the board and uses the information available. These two devices have unique addresses. The peripheral will be advertising information to nearby devices, while the central device will look for any devices that advertise information; when the central device finds the advertised information, it attempts to connect to the peripheral device. Once a connection is established, the central device can start reading or writing information from or to the peripheral device.
+
 \begin{figure}[!h]
     \centering
     \includegraphics[width = 0.6\linewidth]{BLE.png}
@@ -33,9 +65,10 @@ When using Bluetooth Low Energy it is important to know the roles of each device
 \end{figure}
 
 
-\subsection{Services, Characteristics and Descriptor}
+
+\subsection{Services, Characteristics Descriptor and Properties}
 \label{sec:servicesandcharacteristics}
- The information transfer system for BLE can be seen in the following hierarchical order. A service is a collection of characteristics and each characteristic has a descriptor that describes the characteristic. See the basic illustration below \ref{fig:ble_roles}.
+The information transfer system for BLE can be displayed in the following hierarchical order. A service is a collection of characteristics; each characteristic has properties and a descriptor that describes the characteristic. See the basic illustration below \ref{fig:ble_roles}.
 
 \begin{figure}[!h]
     \centering
@@ -44,23 +77,62 @@ When using Bluetooth Low Energy it is important to know the roles of each device
     \label{fig:ble_roles}
 \end{figure}
 
-Each \textbf{service} has its own unique identifying code called a UUID. This is to allow one peripheral device to have multiple services. This code can be 128-bit long for each service. A service can also be seen as a group of capabilities. For example, a smartwatch that can measure hart rate, temperature and track your GPS location. These three capabilities can be grouped under one service and can be called the activity service. This method of grouping information allows the central device to better understand and use the information that the peripheral is advertising.
+Each \textbf{service} has its unique identifying code called a UUID. The UUID allows one peripheral device to have multiple services and can be 128-bit long for each service. A service can also be seen as a group of capabilities. For example, a smartwatch can measure heart rate and temperature and track GPS location. These three capabilities can be grouped under one service called the activity service. This method of grouping information allows the central device to understand the information that the peripheral is advertising.
 
-The capabilities mentioned in the above example are better known as \textbf{characteristics}. Each characteristic has its own unique identifying code called a UUID. This is to allow one service to have multiple characteristics. A characteristic can be seen as a single capability. For example, the characteristic of measuring heart rate. This characteristic can be seen as a single capability of the activity service. 
+The capabilities mentioned in the above example are better known as \textbf{characteristics}. Each characteristic has its unique identifying code called, also known as a UUID, which allows one service to have multiple characteristics. A characteristic can be seen as a single capability. For example, the heart rate measurement is one characteristic. This characteristic can be seen as a single capability of the activity service. 
 
-Each characteristic can have a \textbf{descriptor} that describes the characteristic. A descriptor can be seen as a single piece of information about the characteristic. For example, the descriptor of the characteristic of measuring heart rate can be the range of the heart rate measurement. This descriptor can be seen as a single piece of information about the characteristic of measuring heart rate.
+A characteristic has other attributes that help describe the value that it contains. These attributes are \textbf{properties} and \textbf{descriptors}. Properties describe how the characteristic can be used. Properties represent several bits that indicate wherether the characteristic is set to read, write, write without response, notify or indicate. The descriptor contains information about the characteristic value and how it should be interpreted. The descriptor can be user descriptions, format, and units of the value or extended properties of the value\cite{mohammadafaneh2017}. For example, the heart rate characteristic can be a range of the heart rate measurement, and the descriptor defines this range.
 
 
 \section{Force Sensitive Resistors}
-A Force Sensitive Resistor (FSR) is a material which changes resistance when a force is
-applied. A FSR typically consists of 3 layers; a top resistive polymer layer, a bottom thin
-film polymer layer with conductive traces and a middle spacer layer separating the top
-and bottom layers. The three layers are often enclosed in a flexible polymer.
-When there is no pressure applied the top resistive layer and bottom conductive layer
-are completely separated by the spacer and act as an open circuit (infinite resistor).
-As pressure is applied to the FSR the top resistive layer is pressed against the bottom
-conductive layer causing the resistance to decrease.
+A Force Sensitive Resistor (FSR) is a piezoresistive electrical component, meaning a change in the electrical resistivity of a semiconductor or metal can be detected when mechanical strain is applied. Most FSR deivces specify that they are capabil of measuring force at temperatures as high as 200$^\circ C$. FSRs consists of three layers: a semi-conductive material/semi-conductive ink between two substrates. There are two types of FSRs: Shunt Mode and Thru Mode.
+
+Shunt mode FSRs have polymer thick-film layers which have two separated parts. These parts are separated with a spacer. The shunt mode FSR is the most common and basic type of FSR and is also used by the IEEE foot sensor. This type of FSR would change resistance when pressure is applied, and the ink touches the electrodes. The more pressure applied more ink touches the electrodes and yields the voltage change across the resistor.
+
+Thru Mode FSRs are made of polyester film layers which are positioned on the outer parts, while a conductive silver circle with traces secures the pressure-sensitive layers. An adhesive layer will then laminate the two layers together. See \ref{fig:fsr} for a graphical illustration the two types of FSRs. Figure \ref{fig:fsr}, along with more tutorials on the use of FSRs, was found here \cite{tekscan2022}, \cite{gigiseeedstudio2020}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width = 0.7\linewidth]{fsr.jpg}
+    \caption{An illustration of the two types of FSRs and their different layers.}
+    \label{fig:fsr}
+\end{figure}
+
+% A FSR typically consists of 3 layers; a top resistive polymer layer, a bottom thin
+% film polymer layer with conductive traces and a middle spacer layer separating the top
+% and bottom layers. The three layers are often enclosed in a flexible polymer.
+% When there is no pressure applied the top resistive layer and bottom conductive layer
+% are completely separated by the spacer and act as an open circuit (infinite resistor).
+% As pressure is applied to the FSR the top resistive layer is pressed against the bottom
+% conductive layer causing the resistance to decrease.
 
 \section{Open GLES for android}
 \label{sec:OpenGL}
-OpenGL is an open source, graphics library for high performance 2D and 3D graphics rendering. OpenGL|ES is flavor of OpenGL specifically intended for embedded and mobile devices. OpenGL|ES is a cross-plaftorm high performance graphics API that can be used by Android devices. Android supports both the framework API and the Native Development Kit (NDK) of OpenGL.
+OpenGL is an open-source graphics library for high-performance 2D and 3D graphics rendering. OpenGL|ES is a flavor of OpenGL intended explicitly for embedded and mobile devices. OpenGL|ES is a cross-platform, high-performance graphics API that Android devices can use. Android supports the framework API and the Native Development Kit (NDK) of OpenGL.  
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width = 0.9\linewidth]{pipeline.png}
+    \caption{OpenGl pipeline diagram adapted from \cite{androidmakersbenjaminmonjoie2017}}
+    \label{fig:openglpipeline}
+\end{figure}
+The primary pipeline of OpenGL and also OpenGLES starts by defining vertices. These are the points to draw a shape in a 2D or 3D space. These raw vertices are passed to the vertex shader to be processed. The vertex shader code will give these points a position on the screen. Next, the processed vertices are passed to the rasterizer. The rasterizer describes a virtual scene. The best way to understand this is to look at the visual explanation in figure \ref{fig:rasterizer  }. The geometry of what is to be displayed is described with vertices. The rasterizer projects this geometry onto a 2D plane, which is the screen. The vertices are called fragments after they have been projected. These fragments are mapped with textures or colors by the fragment shader, depending on what is to be displayed. After that, all the fragments are merged to represent the final output to the display. All this information is compiled from the video presetion\cite{media.ccc.defolkert2019} by folkert. Here he explains all the basics, mathematics, and code of OpenGL.
+\clearpage
+\begin{figure}[]
+    \includegraphics[width = 0.9\linewidth]{Rasterizer.png}
+    \caption{Rasterizer illustration}
+    \label{fig:rasterizer}
+\end{figure}
+
+Regarding the Android framework, two foundational classes allow manipulating graphics with OpenGL ES API. These two classes are $GLSurfaceView$ and $GLSurfaceView.Renderer$. It is best to understand the implementation of these two classes to use OpenGL in an Android application.\cite{androiddevelopers2022}\\
+\\
+\textbf{GLSurfaceView}\\
+This class is a View that can draw and control objects utilizing OpenGL API. This class is very similar to the $SurfaceView$ in functionality. To use the $GLSurfaceView$ class, create an instance of it and add a renderer. It is also possible to extend this class to allow for touchscreen functionality.
+\\
+\textbf{GLSurfaceView.Renderer}\\
+This is an interface that needs to be implemented as a separate class. This class should then be attached to the $GLSurfaceView$ class by using $GLSurfaceView.setRenderer()$. This interface defines the methods required for drawing. These methods are the following:
+\begin{itemize}
+    \item onSurfaceCreated(): This method is called when the GLSurfaceView is created. This method contains the actions needed to set up and initialize all the parameters and objects that are needed for an OpenGL ES environment. This method will only be called once.
+    \item onDrawFrame(): This method is called each time, and a graphics object is drawn and redrawn. 
+    \item onSurfaceChanged(): This method is called when the system finds that the geometry has changed. The geometry can change when the orientation of the device screen is changed, like changing from portrait to landscape, or when the size of the $GLSurfaceView$ changes.
+\end{itemize}

@@ -5,7 +5,11 @@
 \subsubsection*{English}
 
 \selectlanguage{english}
-The English abstract.
+This document is a technical report on the design and development of a mobile application capable of using data readings from a prototype pressure-sensing footwear device to display foot strike patterns and other relevant information. This information could help with health analysis, like the gait analysis, on athletes like runners. This application could be a tool for healthcare professionals and performance athletes.
+
+The prototype device can continuously sample ADC measurements from a device with 8 FSR cells. This FSR device fits in the sole of a shoe, and ADC measurements from the FSR device are transmitted by the Arduino via BLE. The application can then connect to the Arduino, receive these ADC readings, and use the data to display the foot strike patterns of a user, and further calculations can is done to find the force exerted in each FSR cell. The foot strike patterns are displayed on a heatmap using the power of openGL|ES. The force exerted on each cell can be calculated by calibrating each cell and using the necessary mathematics to formulate a graph. The prototype device has battery power and fits in a casing that allows users to strap the device to their legs.
+
+A new casing was designed and printed with a 3D printer to cover the prototype device circuitry.
 
 
 
