@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class DataSeeker extends androidx.appcompat.widget.AppCompatSeekBar {
     // ExecutorService creates the animation thread which runs the loop, code
     private ExecutorService playService = Executors.newSingleThreadExecutor();
-    private boolean isPlaying = true;
+    public boolean isPlaying = true;
     // range: 0 - dataAccessor.getTotalFrames() -1
     private int currentFrame = 0;
     // Reference point for the time stamp of the first frame

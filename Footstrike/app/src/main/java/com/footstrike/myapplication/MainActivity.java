@@ -37,7 +37,6 @@ import java.util.Scanner;
 public class MainActivity extends AppCompatActivity  implements HBRecorderListener {
 
     Switch sw;
-
     public static Runnable defaultrunnable;;
     HBRecorder hbRecorder;
     private static final int SCREEN_RECORD_REQUEST_CODE = 777;
@@ -49,6 +48,7 @@ public class MainActivity extends AppCompatActivity  implements HBRecorderListen
     Button recordButton;
     Button connectButton;
     Button loadButton;
+    CustomTableLayout tableForce;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity  implements HBRecorderListen
         heatMap.addPoint(0.50000f,0.32639f, GattHandler.data);
 
 
+
        // Views and Buttons and switches
         stepsView = findViewById(R.id.txtSteps); // basic text view for steps
         connectButton = findViewById(R.id.btnConnectBLE); // button to connect to arduino
@@ -90,7 +91,15 @@ public class MainActivity extends AppCompatActivity  implements HBRecorderListen
         loadButton = findViewById(R.id.btnloadFile); // button to load previous recorded data
         sw = findViewById(R.id.swtLive); // switch that toggles between prerecorded data or live data stream
         TextView time = findViewById(R.id.txtTime); // shows timestamp of loaded data
-        final CustomTableLayout tableForce = findViewById(R.id.tableForce);
+        tableForce = findViewById(R.id.tableForce);
+
+        // when live mode is active we want this runnable
+        defaultrunnable = ()->{
+            heatMapper.dataChanged();
+            tableForce.updateData();
+            startRecordingData();
+        };;
+        GattHandler.runnable = defaultrunnable;
 
         connectButton.setOnClickListener((View v)->{
             GattHandler.init(getApplicationContext());
@@ -180,6 +189,11 @@ public class MainActivity extends AppCompatActivity  implements HBRecorderListen
             d.setFileSelectedHandler(file -> {
                 try {
                     sw.setChecked(false);
+                    GattHandler.runnable = ()->{
+
+                        startRecordingData();
+                    };
+
                     Scanner s = new Scanner(file);
                     dataList = new ArrayList<DataStore>();
                     while(s.hasNextLine()){
@@ -226,30 +240,25 @@ public class MainActivity extends AppCompatActivity  implements HBRecorderListen
             d.show();
         });
         findViewById(R.id.btnStartStop).setOnClickListener((View v)->{
-            dataSeeker.playPause();
+            if(!sw.isChecked()) {dataSeeker.playPause();}
         });
 
-
-        // when live mode is active we want this to be the runnable
-        defaultrunnable = ()->{
-            heatMapper.dataChanged();
-            tableForce.updateData();
-            startRecording();
-        };;
-
-        GattHandler.runnable = defaultrunnable;
 
         // switch that toggles live mode
         sw.setOnClickListener((View v) ->{
             if (sw.isChecked()){
                 GattHandler.runnable = defaultrunnable;
+                GattHandler.init(getApplicationContext());
+                dataSeeker.isPlaying = false;
                 Toast.makeText(this, "Live mode is now ON ", Toast.LENGTH_SHORT).show();
 
             }else{
                 GattHandler.runnable = ()->{
 
-                    startRecording();
+                    startRecordingData();
                 };
+
+                dataSeeker.isPlaying = true;
                 Toast.makeText(this, "Live mode is now OFF ", Toast.LENGTH_SHORT).show();
             }
         });
@@ -263,7 +272,7 @@ public class MainActivity extends AppCompatActivity  implements HBRecorderListen
 
     }
 
-    void startRecording(){
+    void startRecordingData(){
         if (recordData) {
             stepsView.setText("Steps: " + GattHandler.data.steps);
             if (stepDone == false && GattHandler.data.met1Val < 10 && GattHandler.data.met3Val < 10) {
