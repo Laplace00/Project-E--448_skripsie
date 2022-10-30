@@ -6,12 +6,12 @@
 \section{Overview}
 \label{sec:testingoverview}
 
-To test and display the capabilities of the device an application, various test where done when walking on certain surfaces. An important thing to consider is that the shoe used is a running shoe and running shoes have heels that are lifted to make a heel strike more comfortable. This can be seen in all test that the heel sensors experience more pressure than the rest of the sensors. The temperature was not taken into consideration as FSR cells are not sensitive to temperature conditions. Please see figure \ref{fig:footsensordevice} in appendix \ref{appen:footweardevice} to understand the legends of the graphs to following in this section.
+Basic tests were conducted to ensure the device and application function as intended. After that, more tests were done by walking on different surfaces. By doing so, the system's capabilities could be displayed, and interesting observations could be made. An important thing to consider is that the shoe used is a running shoe, and running shoes have lifted heels to make a heel strike more comfortable. This can be seen in all tests that the heel sensors experience more pressure than the rest of the sensors. The temperature of the FSR cells was not considered, as FSR cells are not sensitive to temperature conditions, as seen in the specifications of many FSR devices. Please see figure \ref{fig:footsensordevice} in appendix \ref{appen:footweardevice} to understand the graphs' legends in this section.
 
 \section{Calibration}
 \label{sec:calibration}
 
-The foot sensor calibration was done by the previous student  by using a compression testing machine, the Instron 3345. This machine can apply a compression force up to 40kN according to the previous student. The machine was set up to apply a certain amount of force and slowly release. The force was applied to a single cell and the output ADC where recorded for this cell. The student also stated in his report that due to the machine having a slow release all ADC values between the interval $F_N - 1 < F_N < F_N + 1$, where $F_N$ is applied force, had been recorded and an average ADC value was calculated. The same test was done for the cells that are connected to the ADS1115. The results were recorded and plotted as seen in figure \ref{fig:calibration}
+The previous student did the foot sensor calibration by using a compression testing machine, the Instron 3345. According to the previous student, this machine can apply a compression force up to 40kN. The machine was set up to apply a certain amount of force and slowly release. The force was applied to a single cell and the output ADC where recorded for this cell. Due to the machine's slow release all ADC values between the interval $F_N - 1 < F_N < F_N + 1$, where $F_N$ is applied force, had been recorded and an average ADC value was calculated. The same test was done for the cells that are connected to the ADS1115. The results were recorded and plotted as seen in figure \ref{fig:calibration}
 \clearpage
 \begin{figure}[!htb]
     \centering
@@ -20,15 +20,44 @@ The foot sensor calibration was done by the previous student  by using a compres
     \label{fig:calibration}
 \end{figure}
 
+\section{Applied force accuracy}
+The test for this section was conducted using two 2.5kg($\approx$24.5N) weights and putting them on a single FSR cell. When testing the accuracy of the force calculations, it was found that the two cells connected externally were not accurate. Another issue was that the FSR cells had a large surface area, which made it difficult to distribute the weight evenly across a cell. If the weight is not perfectly distributed, the readings are not accurate. It is impossible to distribute the weight evenly when the foot sensor is fitted into a shoe; therefore, the sensor is not very good for accurate force measurements.
+
+\begin{table}[!h]
+    \centering
+    \caption{Force readings of each FSR cell when applying 2.5kg and 5kg}
+    \begin{tabular}{||c c c||} 
+     \hline
+     Cell & 2.5kg applied(N) & 5kg applied(N) \\ [0.5ex] 
+     \hline\hline
+     Arch &15.33 & 30.21 \\ 
+     \hline
+     Met5 &16.12 & 31.86 \\
+     \hline
+     Met3 &24.93& 49.51\\
+     \hline
+     Met1 &23.29 & 49.38 \\
+     \hline
+     HeelR &24.04& 48.21\\
+     \hline
+     HeelL &24.78& 49.78\\ 
+     \hline
+     Hallux &24.44& 49.37\\ 
+     \hline
+     Toes &24.44& 49.11\\
+     \hline
+    \end{tabular}
+    \end{table}
 \section{Bare foot}
 
-By standing bare foot on the pressure we can see what a mid foot standing patterns should look like. This will be used as a control as it will become apparent that the shoes has quite the influence on how the device behaves.
+By standing bare foot on the pressure we can see what a mid foot standing patterns should look like. This test will be used as a control as it will become apparent that the shoes influence how the device behaves.
 \begin{figure}[!htb]
     \centering
-    \includegraphics[width = 0.55\linewidth, height = 8cm]{barefeet.jpg}
+    \includegraphics[width = 0.6\linewidth]{barefeet.jpg}
     \caption{Bare foot mid-stance test}
     \label{fig:calibration}
 \end{figure}
+\clearpage
 \section{Basic strike patterns}
 \label{sec:basicstrike}
 \begin{figure}[!htb]
@@ -59,7 +88,7 @@ The following test was conducted from a standing start and then, at a steady rat
 \begin{figure}[!htb]
     \centering
     \includegraphics[width = 1.1\linewidth]{flatsurface.png}
-    \caption{Graph that shows the force applied to each FSR cell when walking on a flat surface}
+    \caption{Graph that shows the force applied to each FSR cell when walking on a hard surface}
     \label{fig:hardflat}
 \end{figure}
 
@@ -72,7 +101,7 @@ The following test was conducted from a standing start and then, at a steady rat
 \clearpage
 \section{Inclines}
 \label{sec:inclines}
-The following test was conducted from a standing start and then walking up and down a hill or incline. The surface  of the incline was hard and somewhat uniform. Here it is seen that there is much less focus on the heel part of the foot when walking up and down. It is also clear that much shorter and more frequent steps was taken when walking downhill. 
+The following test was conducted from a standing start and then walking up and down a hill or incline. The surface  of the incline was hard and somewhat uniform. There is much less focus on the heel part of the foot when walking up and down. It is also clear that much shorter and more frequent steps was taken when walking downhill. 
 
 \begin{figure}[!htb]
     \centering
@@ -90,7 +119,7 @@ The following test was conducted from a standing start and then walking up and d
 
 \clearpage
 \section{Stairs}
-The following test was conducted from a standing start and then walking up and down stairs. The stairs had a small surface area and therefore when walking on them only a part of the foot would make contact. When walking up the stairs it is apparent that only the front area pf the made contact with the ground. It is also interesting that one can see the last step was at the top of the staircase as for the last step shows the heel area had more applied force.
+The following test was conducted from a standing start and walking up and down stairs. The stairs had a small surface area; therefore, when walking on them, only a part of the foot would make contact. When walking up the stairs it is apparent that mainly the front area made contact with the ground. It is also interesting that the last step on the graph shows force applied to the heel area again, when the top of the staircase is reached.
 \label{sec:stairs}
 \begin{figure}[!htb]
     \centering
@@ -104,3 +133,7 @@ The following test was conducted from a standing start and then walking up and d
     \caption{Graph that shows the force applied to each FSR cell when walking downstairs}
     \label{fig:downstairs}
 \end{figure}
+
+
+
+

@@ -5,11 +5,19 @@
 \subsubsection*{English}
 
 \selectlanguage{english}
-This document is a technical report on the design and development of a mobile application capable of using data readings from a prototype pressure-sensing footwear device to display foot strike patterns and other relevant information. This information could help with health analysis, like the gait analysis, on athletes like runners. This application could be a tool for healthcare professionals and performance athletes.
+This document is a technical report on the design and development of a mobile application capable of using data readings from a prototype pressure-sensing footwear device to display foot strike patterns and other relevant information. This information could help with health analysis, like the gait analysis, on runners and other athletes. This application could be a tool for healthcare professionals and high-performance athletes.
 
-The prototype device can continuously sample ADC measurements from a device with 8 FSR cells. This FSR device fits in the sole of a shoe, and ADC measurements from the FSR device are transmitted by the Arduino via BLE. The application can then connect to the Arduino, receive these ADC readings, and use the data to display the foot strike patterns of a user, and further calculations can is done to find the force exerted in each FSR cell. The foot strike patterns are displayed on a heatmap using the power of openGL|ES. The force exerted on each cell can be calculated by calibrating each cell and using the necessary mathematics to formulate a graph. The prototype device has battery power and fits in a casing that allows users to strap the device to their legs.
+The prototype device can continuously sample ADC measurements from a portable device with 8 FSR cells. This FSR device fits in the sole of a shoe, and ADC measurements from the FSR device are read and transmitted by the Arduino. The transmission happens via BLE (Bluetooth Low Energy). The Android application can then connect to the Arduino, receive these ADC readings, and use the data to display the foot strike patterns of a user. The foot strike patterns are displayed on a heatmap using the power of openGL|ES. The force exerted on each cell can be calculated by calibrating each cell and using the necessary mathematics to formulate a graph that relates the force to the ADC values. The prototype device has battery power and fits in a casing that allows users to strap the device to their legs.
 
 A new casing was designed and printed with a 3D printer to cover the prototype device circuitry.
+\clearpage
+\subsubsection*{Afrikaans}
+\selectlanguage{afrikaans}
+
+Hierdie dokument is 'n tegniese verslag oor die ontwerp en ontwikkeling van 'n mobiele toepassing wat datalesings van 'n prototipe drukwaarnemende skoentoestel kan neem om voetstakingpatrone en ander relevante inligting te vertoon. Hierdie inligting kan help met gesondheidsanalises, soos die Gait analise, op hardlopers en ander atlete. Hierdie toepassing kan 'n hulpmiddel wees vir afrigters en atlete.
 
 
+Die prototipe toestel kan voortdurend analoog na digitale lesings neem vanaf 'n draagbare toestel met 8 drukkrag sensitiewe resistor selle. Hierdie Ftoestel pas in die sool van 'n skoen, en analoog na digitale word deur die Arduino opgeneem en oorgedra. Die oordrag vind plaas via BLE (Bluetooth Low Energy). Die Android-toepassing kan dan aan die Arduino koppel, hierdie ADC-lesings ontvang en die data gebruik om die voetstakingpatrone van 'n gebruiker te vertoon. Die voetstakingpatrone word op 'n hittekaart(heatmap) vertoon met behulp van die krag van openGL|ES. Die drukkrag wat op elke sel uitgeoefen word, kan bereken word deur elke sel te kalibreer en die nodige wiskunde te gebruik om 'n grafiek te formuleer wat die krag met die analog na digitale waardes in verband bring. Die prototipe toestel het batterykrag en pas in 'n omhulsel waarmee gebruikers die toestel aan hul bene kan vasbind.
+
+'N Nuwe omhulsel is ontwerp en gedruk met 'n 3D -drukker om die stroombaan van die prototipe toestel te bedek.
 

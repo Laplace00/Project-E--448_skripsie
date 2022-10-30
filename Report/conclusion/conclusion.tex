@@ -2,7 +2,7 @@
 
 \chapter{Summary and Conclusion}
 \label{chap:conclusion}
-An application showing foot strike patterns was successfully designed, developed, and tested. The final application has the following features:
+An Android application displaying foot strike patterns was successfully designed, developed, and tested. The final application has the following features:
 \begin{itemize}
     \item Bluetooth connection to specific Arduino device
     \item Heatmap that displays the data from the foot sensor
@@ -11,22 +11,26 @@ An application showing foot strike patterns was successfully designed, developed
     \item Option to load previously recorded data and play it on the application
   \end{itemize}
 
-  It was possible to conduct some tests with the device and application using these features. Some observations could be made, like seeing less pressure on the FSR cells when walking on grass than on a hard surface. It was also seen how walking uphill differs from walking downhill and what type of foot strike patterns all the tests yields. Another interesting observation was that the shoe used for testing had slightly lifted heels, which clearly influenced the strike patterns. It can be seen that the heel FSR cells received much more pressure.
+The application also had a feature that calculated the user's steps, but there was no use for this in the current state of the application. Not having two devices made it difficult to calculate the user's total steps for both feet. This feature will be added to further work to, for example, calculate cadence.
 
-  Some functionality could not be achieved due to time constraints and the prototype device limitations. This is mainly because only one prototype device was available, and the prototype device had design choices that constrained the development of possible features.
+  It was possible to conduct some tests using the device and application features. Some observations could be made, like seeing less pressure on the FSR cells when walking on grass than on a hard surface. It was also seen how walking uphill differs from walking downhill and what type of foot strike patterns all the tests yields. Another interesting observation was that the shoes used for testing had slightly lifted heels, influencing the strike patterns as the heel FSR cells received more pressure when standing in a mid-stance position.
 
-  Video recordings demonstrating the features of the device and application were shown to the staff of the Sports Science Faculty, and there was much interest in the device and application. The major concern was the device, which clearly indicates what is to be done in further work. The link to the videos mentioned follows. The following link is an example video of walking uphill \cite{dewaldtsnymanup2022}, and this link \cite{dewaldtsnymandown2022} is an example video of walking downhill 
+  Video recordings demonstrating the features of the device and application were shown to the staff of the Sports Science Faculty, and there was much interest in the device and application. The primary concern was the device, which indicates what is to be done in further work. The link to the videos mentioned follows. The following link is an example video of walking uphill \cite{dewaldtsnymanup2022}, and this link \cite{dewaldtsnymandown2022} is an example video of walking downhill. 
+
+  Some functionality could not be achieved due to time constraints and limitations. This is mainly because only one prototype device was available, and the prototype device had design choices that constrained the development of possible features.
+
+
 \clearpage
 \chapter{Further Work}
 \label{chap:furtherwork}
 
 \section{Device}
 
-As mentioned in section\label{li} the current prototype does have some limitations. These limitations include that it is difficult to duplicate this device, and the weight and geometry of the device do not allow it to be used for running. The Arduino Nano 33 BLE also lacks the necessary analog pins. Therefore a re-design is recommended for the prototype device. A device like the ESP32 would better fit a prototype device. The ESP32 has a sufficient amount of analog pins, and some models have built-in charging circuits making it easier to build multiple copies of the possible design.
+As mentioned in section \ref{limitations} the current prototype does have some limitations. These limitations include that it is difficult to duplicate this device, and the weight and geometry of the device do not allow it to be used for running. The Arduino Nano 33 BLE also lacks the necessary analog pins. Therefore a re-design is recommended for the prototype device. A device like the ESP32 would better fit a prototype device. The ESP32 has a sufficient amount of analog pins, and some models have built-in charging circuits making it easier to build multiple copies of the possible design.
 
-As mentioned in section \ref{technologygair} other sensors could be used for further analysis. The Arduino Nano 33 BLE has an accelerometer and gyroscope that are not being used in the project's current state. These types of sensors should be kept in mind when designing a new prototype device.
+As mentioned in section \ref{technologygair} other sensors could be used for further analysis. The Arduino Nano 33 BLE has an accelerometer and gyroscope that are not used in the project's current state. These types of sensors should be considered when designing a new prototype device.
 
-Another recommendation is to refactor the FSR device. There are companies like Stappone\cite{stappone}  who have much more sophisticated devices.
+Another recommendation is to re-calibrate or refactor the foot sensor device. There are companies like Stappone\cite{stappone}  who have much more sophisticated devices. This indicates that it is possible to build a better sensor device.
 \section{Application}
 
 Lastly,  exploring the capabilities of OpneGLES would allow for more advanced 3D rendered images or even live 3D movements, as this is all well in the capabilities of OpenGLES.

@@ -4,7 +4,8 @@
 
 \section{System overview}
 
-The prototype foot sensor device was designed and built by Jared Adams, the predecessor of this skripsie topic.
+The prototype foot sensor device was designed and built by Jared Adams, the predecessor of this skripsie topic. \href{https://drive.google.com/file/d/1Jbl6vRFZgYbqtvDGFZ4_XmvcbU_vJX-k/view?usp=sharing}{Link to Jared Adams's skripsie report}. See appendix \ref{appen:prototype} for images of the device.
+
 The LiFePO4 battery supplies power to all the components of the prototype device. These components are an Arduino Nano 33 Ble, an ADS115 ADC module, and the IEEE foot sensor. The battery has a nominal voltage of 3.2VDC and is charged by a battery charge management controller, namely, the MCP73123.
 
 The prototype device will then use BLE to transmit ADC data to an Android device. The Android device will make use of this data via an application written in Java. This application will consist of various methods that perform calculations with the data, display the data in various ways, and save the data.
@@ -19,7 +20,7 @@ The prototype device will then use BLE to transmit ADC data to an Android device
 \section{Device components}
 
 \subsection{Arduino Nano 33 BLE}
-The Arduino Nano 33 BLE is a small Arduino Nano device ideal for wearable devices. The Nano 33 BLE has a powerful processor, the nRF52840 from Nordic Semiconductors, a 32-bit ARM Cortex-M4 CPU running at 64 MHz. The central processor also includes Bluetooth Low Energy for a low-power consumption solution to transmit data wirelessly. The board also contains eight 3.3-volt 12bit analog input pins (two of which are designated for I$^2$C pins) and 14 digital input/output pins. 
+The Arduino Nano 33 BLE is a small Arduino Nano device ideal for wearable devices. The Nano 33 BLE has a powerful processor, the nRF52840 from Nordic Semiconductors, a 32-bit ARM Cortex-M4 CPU running at 64 MHz. The central processor also includes Bluetooth Low Energy, a low-power consumption solution to transmit data wirelessly. The board also contains eight 3.3-volt 12bit analog input pins (two of which are designated for I$^2$C pins) and 14 digital input/output pins. 
 
 \begin{figure}[!h]
     \centering
@@ -30,7 +31,7 @@ The Arduino Nano 33 BLE is a small Arduino Nano device ideal for wearable device
 
 
 \subsection{LiFePO4 Battery}
-A lithium iron phosphate battery is a type of rechargeable battery. This battery uses LiFePO4 as cathode material and graphite carbon electrodes as the anode and has a maximum charge cut-off of 3.65V and a minimum charge cut-off of 2.5V. LiFePO4 batteries have a flat discharge curve with a nominal output voltage of 3.2V. This battery was used to provide a stable supply voltage for the system and a stable reference voltage for the ADCs. See the datasheet \cite{antbatt2019} for all the battery characteristics as needed.
+A lithium iron phosphate battery is a type of rechargeable battery. This battery uses LiFePO4 as cathode material and graphite carbon electrodes as the anode and has a maximum charge cut-off of 3.65V and a minimum charge cut-off of 2.5V. LiFePO4 batteries have a flat discharge curve with a nominal output voltage of 3.2V. This battery provided a stable supply voltage for the system and a stable reference voltage for the ADCs. See the datasheet \cite{antbatt2019} for all the battery characteristics as needed.
 
 \begin{figure}[h]
 

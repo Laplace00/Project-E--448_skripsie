@@ -2,21 +2,15 @@
 
 \chapter{Software Design}
 \label{chap:systemdesign}
-
-
+Find the full Arduino, Java, and latex code in this repository. \cite{dewaldt2022} 
 \section{Arduino Code}
 \subsection{Setup}
 \begin{wrapfigure}{r}{0.2\textwidth}
   \caption{Basic illustration of setup function}
   \includegraphics[width=0.15\textwidth]{arduinosetup.png}
 \end{wrapfigure}
-When using Arduino devices, there will be a setup() method which will run once only when the device starts. The Serial communications and baud rate are specified with the Serial.begin() function. After that, the Arduino pin modes such that  the internal pull-up resistors are active as this is required for measuring the analog values from the 
-IEE foot sensor. The pin mode can be configured using the pinMode() function. This function takes two arguments which are the pin number and the mode. An object of the Adafruit$\_$ADS1115  class is created to allow the use of the ADC readings sent by the ADS1115 via I2C. Now within the setup() method ads.begin method can be triggered to do all the necessary I2C setup for the ADS1115.
-
-
-Next, the BLE setup commences. Arduino has a well-written library, ArduinoBLE.h, which provides all the needed functions to set up BLE for the Arduino device. See code snippet \ref{blesetup}
+When using Arduino devices, there will be a setup() method which will run once only when the device starts. The Serial communications and baud rate are specified with the Serial.begin() function. After that, the Arduino pin modes are set to activate the internal pull-up resistors, as this is required for measuring the analog values from the IEE foot sensor. The pin mode can be configured using the pinMode() function. This function takes two arguments which are the pin number and the mode. An object of the Adafruit$\_$ADS1115  class is created to allow the use of the ADC readings sent by the ADS1115 via I2C. Now within the setup() method ads.begin method can be triggered to do all the necessary I2C setup for the ADS1115. Next, the BLE setup commences. Arduino has a well-written library, ArduinoBLE.h, which provides all the needed functions to set up BLE for the Arduino device. See code snippet \ref{blesetup}
 \begin{lstlisting}[language=c++, caption=BLE Setup, label=blesetup]
-    // BLE setup
     BLE.setLocalName("Arduino Nano 33 BLE (Peripheral)");
     BLE.setAdvertisedService(gaitService);
     gaitService.addCharacteristic(gaitCharacteristic1);
@@ -31,7 +25,7 @@ Next, the BLE setup commences. Arduino has a well-written library, ArduinoBLE.h,
 
 
 
-The "gaitService", "gaitCharacteristic1" and  "gaitCharacteristic2" object, used in code snippet \ref{blesetup}, are created outside the setup() function. The ArduinoBLE library provides the BLEService and BLECharacteristic classes to create these objects. The BLEService class only requires the service UUID as an argument to create an object. The BLECharacteristic class requires the characteristic UUID, the properties of the characteristic, and the size of the value that the characteristic will represent. The properties can be specified by applying an or-operation with predefined constants provided by the ArduinoBLE library.
+The "gaitService", "gaitCharacteristic1" and  "gaitCharacteristic2" objects, used in code snippet \ref{blesetup}, are created outside the setup() function. The ArduinoBLE library provides the BLEService and BLECharacteristic classes to create these objects. The BLEService class only requires the service UUID as an argument to create an object. The BLECharacteristic class requires the characteristic UUID, the properties of the characteristic, and the size of the value that the characteristic will represent. The properties can be specified by applying an or-operation with predefined constants provided by the ArduinoBLE library.
 
 \subsection{Main loop}
 \begin{figure}[!htb]
@@ -48,7 +42,7 @@ All the ADC operations that need to happen are in the getReadings() function. Th
 
 \subsubsection{BLE}
 
-In the main loop() function, the Arduino will continuously wait for a connection from a central device. An if statement with the BLEDevice object as a condition will wait for a connection to be established. Within the if statement is a while loop which will loop while the central device is connected. Inside the while loop the getReadings() function is called to get all the ADC readings. These ADC readings are written to each characteristic with the writeValue method from the previously created BLECharacteristic class objects. These characteristics are now advertising data to the central device
+In the main loop() function, the Arduino will continuously wait for a connection from a central device. An if statement with the BLEDevice object as a condition will wait for a connection to be established. Within the if statement is a while loop which will loop while the central device is connected. Inside the while loop, the getReadings() function is called to get all the ADC readings. These ADC readings are written to each characteristic with the writeValue() method from the previously created BLECharacteristic class objects. These characteristics are now advertising data to the central device
 
 
 
@@ -64,12 +58,12 @@ The current version of the android application is only for testing purposes. Thi
 \end{figure}
 
 \subsection{HeatMap}
-The heat map is the main focus of this topic as it is an excellent way of displaying the user's foot strike patterns clearly and visually understandable way. For this openGL was used to represent the data graphically. The heat map consists of 3 classes: HeatMap, HeatmapRenderer, HeatmapView.
+The heat map is the main focus of this topic, as it is an excellent way of displaying the user's foot strike patterns clearly and visually. For this openGL was used to represent the data graphically. The heat map consists of 3 classes: HeatMap, HeatmapRenderer, HeatmapView.
 
 The HeatMapPoint, in the HeatMap class, contains the high-level code that facilitates interaction between java and OpenGL. Upon creating an instance of this class, the vertex and fragment shader code is loaded from internal resources; this allows for ease of editing, considering the alternative is placing the code into strings. 
 The vertex shader is responsible for supplying OpenGL with any transformations to the drawing surface; this is only used to orient the camera for 2D rendering correctly.
 
-The fragment shader is the more important one, the code contained within $heatmap\_f.frag$ is run for every pixel on the heatmap surface. To determine the color of any particular pixel, the distance to all the heatmap points are calculated and an appropriate color is determined based on this.
+The fragment shader is the more important one, the code contained within $heatmap\_f.frag$ is run for every pixel on the heatmap surface. To determine the color of any particular pixel, the distance to all the heatmap points is calculated and an appropriate color is determined based on this.
 The HeatMap class also contains the java representation of these points as a 1D float array, with each point consisting of an x, y, and intensity value.
 Then there are also some constants such as width, height, pointRadius, and heatmax(the maximum value each point can have). The init function is responsible for setting up OpenGL and loading the shader code. To interface with the rest of the program, the heatmap provides the IHeatMappable interface, which is used to retrieve an intensity value for a given index. An "instance" of this interface is included in every instance of the HeatMapPoint class, representing individual points with x and y coordinates. The coordinate system is set up such that coordinates are normalized by the smallest of the width and height measurements. This is very useful because it means that as long as the aspect ratio does not change, any change in width and height will not result in any of the points' coordinates changing. The heatmap contains a list of these points that it then packs into the aforementioned 1D array for sending to OpenGL. The initPoints function creates this 1D array and sets the initial values, but whenever the values of points change dataChanged should be called to update the 1D representation. Points can be added to the heatmap using the addPoint function.
 Lastly, the draw function is in charge of actually using OpenGL to draw the shader onto the screen. This function also sends the java variables to OpenGL for use within the shader code.
@@ -79,18 +73,18 @@ The HeatmapRenderer class contains a reference to its HeatMap instance used for 
 
 The HeatmapView class is a custom view created to display the heatmap on the screen of a mobile device. This view includes some OpenGL initialization code and creates and sets the heatmap renderer. It also exposes the actual HeatMap object via getHeatmap to allow external activity code to add points. A separate function is added for updating the HeatMap data; this is required because the HeatMap needs to be updated, and the view itself needs to request a re-render.
 \subsection{DataSeeker}
-This class is an extension of the base Android SeekBar view, which allows a user to tap and linearly drag a notch between a minimum point and a maximum point. The goal of the DataSeeker is to allow for the animation of an arbitrary object so long as it implements the provided IDataAccessor interface. This interface provides the DataSeeker with the total amount of frames in an animation, the real-time stamp in milliseconds of any frame, and a function that should display any given frame. This class uses an ExecutorService to run a playback loop at non-fixed intervals; the loop will increase the animation frame by one each iteration, looping if enabled or terminating. The frame is displayed using a reference to an IDataAccessor, and then using that same reference determines how long to sleep the Thread until the next frame should be displayed. 
+This class is an extension of the base Android SeekBar view, which allows a user to tap and linearly drag a notch between a minimum point and a maximum point. The goal of the DataSeeker is to allow for the animation of an arbitrary object so long as it implements the provided IDataAccessor interface. This interface provides the DataSeeker with the total amount of frames in an animation, the real-time stamp in milliseconds of any frame, and a function that should display any given frame. This class uses an ExecutorService to run a playback loop at non-fixed intervals; the loop will increase the animation frame by one each iteration, looping if enabled or terminating. The frame is displayed using a reference to an IDataAccessor, and then using that same reference determines how long to sleep the thread until the next frame should be displayed. 
 
 When this view is created, it sets its own OnSeekBarChangeListener so that it can stop the executor service, skip to the selected frame and restart it again to ensure smooth playback. Something similar is done in the playPause function, stopping or restarting the executor service to toggle playback smoothly.
 \subsection{DataStore}
-The DataStore class is a helper class that handles the data and the format it will be stored on a file. This class stores timed instance data which consists of all the FSR readings for a given timestamp (stored in milliseconds). The class HeatMap.IHeatMappable can be used directly with the heatmap, using the FSR readings as intensity values. The toString function represents all the stored data as a comma delimited string for writing to the disk. This exact string can be passed in as a constructor parameter to re-create the original object by parsing the values after splitting by commas.
+The DataStore class is a helper class that handles the data and the format it will be stored on a file. This class stores timed instance data which consists of all the FSR readings for a given timestamp (stored in milliseconds). The class HeatMap.IHeatMappable can be used directly with the heatmap, using the FSR readings as intensity values. The toString function represents all the stored data as a comma-delimited string for writing to the disk. This exact string can be passed in as a constructor parameter to re-create the original object by parsing the values after splitting by commas.
 \subsection{GattHandler}
 
 The GattHandler class mainly handles the BLE setup and connection. This class has an init(), seen snippet \ref{gattinit}, that takes the current context as an argument and helps initialize the connection with a specific device. The device MAC has to be provided to establish a connection, and as we already know which device we want to connect to, we can provide the Arduino MAC address which is known to us. The content of the init() runs to a separate thread to allow the application to make the BLE connection in the background. The BluetoothAdapter object\cite{BluetoothAdapter2022} is used to initiate a BluetoothDevice object\cite{BluetoothDevice2022} using a known MAC address. Then with the BluetoothDevice object, called device, the connectGatt() method is invoked. This method is used to connect to a GATT server hosted by the Arduino device. The caller, the android device, acts as a GATT client. A callback is then used to return results to the caller. 
 
 \begin{lstlisting}[language=java,caption=init method in the GattHandler class, label=gattinit]
   public static void init(Context context) {
-    // run function on separate thread
+    // run function on a separate thread
     new Thread(() ->
     {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter(); // use to perform fundamental Bluetooth tasks
@@ -100,7 +94,7 @@ The GattHandler class mainly handles the BLE setup and connection. This class ha
     }).start();
 }
 \end{lstlisting}
-The callback mentioned above is a BluetoothGattCallback object. This object is created in the GattHandler class and contains fundamental methods for interacting via Bluetooth. The onServicesDiscovered() method is used to set up the current GATT service with all the characteristics, notifications, and descriptors. Then there is the onCharacteristicChanged() method which is triggered every time the \ Arduino device writes to the characteristics. This allows one to capture the characteristic values and store them. The values are temporarily stored in a buffer, and then each value is stored in a float for further use. As the format of the data being sent is known, the data can easily be labeled. After that, using the DataStore class, the values are stored in a DataStore object. The values are converted to Newtons with the CalculateForce class before storing them in the DataStore object. Lastly, the runnable are set to run in the background. This allows the data to be continuously updated and updates the TextViews and the heatmap. See the code snippet \ref{oncharchanged} that illustrates the  onCharacteristicChanged() method.
+The callback mentioned above is a BluetoothGattCallback object. This object is created in the GattHandler class and contains fundamental methods for interacting via Bluetooth. The onServicesDiscovered() method sets up the current GATT service with all the characteristics, notifications, and descriptors. Then there is the onCharacteristicChanged() method which is triggered every time the \ Arduino device writes to the characteristics. This allows one to capture the characteristic values and store them. The values are temporarily stored in a buffer, and each value is permanently stored in a float for further use. As the format of the data being sent is known, the data can easily be labeled. After that, using the DataStore class, the values are stored in a DataStore object. The values are converted to Newtons with the CalculateForce class before storing them in the DataStore object. Lastly, the runnable is set to run in the background. This allows the data to be continuously updated and updates the TextViews and the heatmap. See the code snippet \ref{oncharchanged} that illustrates the onCharacteristicChanged() method.
 \clearpage
 \begin{lstlisting}[language=java,caption=onCharacteristicChanged() method, label=oncharchanged]
   public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
@@ -140,11 +134,11 @@ The callback mentioned above is a BluetoothGattCallback object. This object is c
 \end{lstlisting}
 \clearpage
 \subsection{FileHelper}
-This class is only a helper class that helps with the file directories to which the recorded data is saved. It consists of 4 methods. The first method is the init() method. This method ensures that the file directories exist and, if not, creates those file directories. The directories are also saved in a File data type. There are two directories, the root and the internal. The data is stored in a root directory to ensure that other applications cannot access the data or when the user has root access. The internal directory is meant to allow users to copy the data from their device to another location. Because the data is also stored in the root directory, the data will always stay intact for the application. Then there is the getRoot() and getInternal(), which return the root and internal File data types, respectively. The last method is the getStoredFiles method, which returns all files stored in the root directory. This method is used to allow users to load stored files in-app.
+This class is only a helper class that helps with the file directories to which the recorded data is saved. It consists of 4 methods. The first method is the init() method. This method ensures that the file directories exist and, if not, creates those file directories. The directories are also saved in a File data type. There are two directories, the root and the internal. The data is stored in a root directory to ensure that other applications cannot access the data or when the user has root access. The internal directory allows users to copy the data from their mobile device to another location. Because the data is also stored in the root directory, the data will always stay intact for the application. Then there is the getRoot() and getInternal(), which return the root and internal File data types, respectively. The last method is the getStoredFiles method, which returns all files stored in the root directory. This method is used to allow users to load stored files in-app.
 
 \subsection{FilePickDialog}
 
-This class is simply an extension of the base Android Dialog class; it serves as a basic file picker and uses the base Android ArrayAdapter with a simple list item layout to display files that can be picked in a popup. Once a file is selected, if this popup has a fileSelectedHandler, it is called with reference to the selected file and closes itself. A custom class, FileItem was created to store file names and extensions; its toString is overrided because the ArrayAdapter will use this to populate the layout with text.
+This class is simply an extension of the base Android Dialog class; it serves as a basic file picker and uses the base Android ArrayAdapter with a simple list item layout to display files that can be picked in a pop-up. Once a file is selected, if this pop-up has a fileSelectedHandler, it is called with reference to the selected file and closes itself. A custom class, FileItem, was created to store file names and extensions; its toString is overridden because the ArrayAdapter will use this to populate the layout with text.
 \clearpage
 \subsection{CustomTableLayout}
 This class extends the LinearLayout class and allows us to display data in a tabular format. The LinearLayout class allows us to add other Views to a View linearly. This means that Views are easily aligned in columns and rows. The CustomTableLayout class has an onCreateView() which contains the TextViews and the necessary formatting to have the View look as seen in figure \ref{fig:customtable}
@@ -156,7 +150,7 @@ This class extends the LinearLayout class and allows us to display data in a tab
   \label{fig:customtable}
 \end{figure}
 
-The CustomTableLayout class also contains a method called updateData(). This method updates the table values with the values received through the GattHandler class. This method is called in the MainActivity.
+The CustomTableLayout class also contains a method called updateData(). This method updates the table values with the values received through the GattHandler class. This method is called in side the MainActivity.
 \clearpage
 \subsection{CalculateForce}
 This class allows for calculating the force applied to each cell using an exponential function. The exponential function was determined using linear regression and from the calibration done in section \ref{sec:calibration}. With the tools provided by Desmos\cite{desmos}, all the points could be plotted, and an exponential could be formulated.
@@ -184,7 +178,7 @@ This class allows for calculating the force applied to each cell using an expone
     \label{fig:desmosgraph}
   \end{figure}
 \clearpage
-  This class has two methods which are calculateForceArduino() and calculateForceADS(). These methods take float values, the ADC readings received via BLE, as arguments and calculate the force values with the previously mentioned exponential functions. See  \ref{forcearduino} on how the calculateForceArduino() method looks. The calculateForceADS() method looks similar, with only the a, b, and c variables differing. 
+  This class has two methods: calculateForceArduino () and calculateForceADS(). These methods take float values, the ADC readings received via BLE, as arguments and calculate the force values with the previously formulated exponential functions. See  \ref{forcearduino} on how the calculateForceArduino() method looks. The calculateForceADS() method looks similar, with only the a, b, and c variables differing. 
 
   \begin{lstlisting}[language=java,caption=Method that calculates the force of the ADC readings from the Arduino, label=forcearduino]
     public static float calculateForceArduino(float value) {
@@ -197,8 +191,24 @@ This class allows for calculating the force applied to each cell using an expone
       return (float) Math.max(0, Math.log((value - a) / b) / c);
   }
   \end{lstlisting}
+\clearpage
+  \subsection{MainActivity}
 
-  \subsection{Main Activity}
+  This class is the core of this Android application. It contains most of the initialization and functionality of buttons, TextViews, and other custom views. This class also implements the HBRecorderListener \cite{jakubferenciktadfrysinger2022}, a library that allows the application to record the device screen. The onCreate()  is a method in the MainActivity that contains a large portion of the application logic. This logic includes initialization, declarations, and functionalities. The onCreate() starts by initializing all the views, buttons, the screen recorder, and the default runnable. A runnable is used to execute code on a thread.
 
-  This class is the core of this Android application
+  \begin{figure}[!htb]
+    \centering
+    \includegraphics[width = 0.7\linewidth]{mainactcodeflow.png}
+    \caption{Overview of the onCreate() method }
+    \label{fig:customtable}
+  \end{figure}
+  
+There are three buttons in the MainActivity, namely: connect, record, and load. These buttons have a setOnClickListerner() method, which takes a lambda function as an argument and executes the code within that lambda function when the specific button is pressed. When \textbf{connect} button is pressed, the init() method from the GattHandler class is executed with the current context of the activity, as its argument and the Android application attempts to connect to the prototype device via BLE. The \textbf{record} button, when pressed, executes the code that brings up a dialog with a text field, which is a field that takes the user-typed text and saves it as a string. This text field saves the name of the recording files, and after pressing the save button, the application starts recording the data and the device screen. Then if the record button is pressed while the application is recording, the recording is stopped, and the data is written to a file. The screen recording will be stopped and saved as well. Both data and screen recording files have the previously specified name as their file names. The recording process will be canceled if the cancel button is pressed instead of the save button. The \textbf{load} button, when pressed, will create a FilePickDialog object. The FilePickDialog object spawns a pop-up that allows previously recorded files to be picked. The DataSeeker object created in the initialization will start playing the recorded file back in the application. The \textbf{play/pause} button executes the playPause() method from the DataSeeker class. This pauses or plays the recording if one is loaded.\\
+There are also a few helper methods used in the onCreate().
+The \textbf{startRecordinScreen()} method is used to start recording the device screen.
+The \textbf{startRecdingData()} method is used to copy live data to an Arraylist of type DataStore. This ArrayList will contain all the data to be saved to a text or CSV file.
+The \textbf{quickStteings()} method is used to set up the screen recorder. This method disables the audio and sets the video quality to standard definition(SD).
+The \textbf{createFolder()} method is used to set up the folder directory to which the screen recordings will be saved. This new directory is where the screen recordings will be saved.
+The \textbf{runOnUIThread()} method is a critical method that takes a runnable as an argument and executes the runnable code on the Main Thread without blocking the Main Thread. This allows all the code in the runnable to be continuously executed, and the application runs smoothly.
+
 
